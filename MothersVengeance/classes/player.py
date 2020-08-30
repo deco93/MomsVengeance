@@ -2,6 +2,9 @@ import pygame
 
 class Player(object):
 	def __init__(self, x, y, width, height):
+		self.max_health = int(100)
+		self.current_health = int(50)
+		self.ammo = int(100)
 		self.x = x
 		self.y = y
 		self.width = width
