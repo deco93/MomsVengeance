@@ -52,11 +52,13 @@ while run:
 			facing = -1
 		else:
 			facing = 1
-		if len(bullets) < 5:
+
+		if man.ammo > 0 and len(bullets) < 5:
+			man.ammo -= 1
 			bullets.append(generate_projectile(facing))
 		pygame.mixer.Channel(0).play(pygame.mixer.Sound('./sounds/bullet.wav'))
 		spaceSpamCount =1
-
+		
 	if keys[pygame.K_LEFT] and man.x >= man.vel:
 		man.x -= man.vel
 		man.left = True

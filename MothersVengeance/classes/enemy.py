@@ -49,6 +49,7 @@ class Enemy(object):
 				self.vel = self.vel * -1
 				self.walkCount = 0
 
+
 	def hit(self, score):
 		if self.health > 0:
 			self.health -= 1
@@ -59,5 +60,4 @@ class Enemy(object):
 			self.visible = False
 		print('GOBLIN HIT...')
 		return score
-
 
