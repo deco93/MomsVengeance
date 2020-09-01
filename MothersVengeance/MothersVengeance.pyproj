@@ -22,6 +22,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="api\api.py" />
+    <Compile Include="api\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="classes\enemy.py" />
+    <Compile Include="classes\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="classes\player.py" />
+    <Compile Include="classes\projectile.py" />
     <Compile Include="api\__init__.py" />
     <Compile Include="classes\ammoui.py">
       <SubType>Code</SubType>
@@ -37,6 +46,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="api\" />
+    <Folder Include="classes\" />
+    <Folder Include="fonts\" />
+    <Folder Include="imgs\" />
+    <Folder Include="sounds\" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="api\__pycache__\" />
     <Folder Include="classes\" />
     <Folder Include="classes\__pycache__\" />
@@ -99,6 +114,9 @@
     <Content Include="imgs\R9.png" />
     <Content Include="imgs\R9E.png" />
     <Content Include="imgs\standing.png" />
+    <Content Include="sounds\bullet.wav" />
+    <Content Include="sounds\hit.wav" />
+    <Content Include="sounds\music.mp3" />
     <Content Include="__pycache__\MothersVengeance.cpython-38.pyc" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
