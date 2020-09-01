@@ -21,7 +21,85 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="api\api.py" />
+    <Compile Include="api\__init__.py" />
+    <Compile Include="classes\ammoui.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="classes\healthBar.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="classes\enemy.py" />
+    <Compile Include="classes\player.py" />
+    <Compile Include="classes\projectile.py" />
+    <Compile Include="classes\__init__.py" />
     <Compile Include="MothersVengeance.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="api\" />
+    <Folder Include="api\__pycache__\" />
+    <Folder Include="classes\" />
+    <Folder Include="classes\__pycache__\" />
+    <Folder Include="fonts\" />
+    <Folder Include="imgs\" />
+    <Folder Include="__pycache__\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="api\__pycache__\api.cpython-37.pyc" />
+    <Content Include="api\__pycache__\api.cpython-38.pyc" />
+    <Content Include="api\__pycache__\__init__.cpython-37.pyc" />
+    <Content Include="api\__pycache__\__init__.cpython-38.pyc" />
+    <Content Include="classes\__pycache__\enemy.cpython-37.pyc" />
+    <Content Include="classes\__pycache__\enemy.cpython-38.pyc" />
+    <Content Include="classes\__pycache__\player.cpython-37.pyc" />
+    <Content Include="classes\__pycache__\player.cpython-38.pyc" />
+    <Content Include="classes\__pycache__\projectile.cpython-37.pyc" />
+    <Content Include="classes\__pycache__\projectile.cpython-38.pyc" />
+    <Content Include="classes\__pycache__\__init__.cpython-38.pyc" />
+    <Content Include="fonts\ShortBaby-Mg2w.ttf" />
+    <Content Include="imgs\bg.jpg" />
+    <Content Include="imgs\L1.png" />
+    <Content Include="imgs\L10E.png" />
+    <Content Include="imgs\L11E.png" />
+    <Content Include="imgs\L1E.png" />
+    <Content Include="imgs\L2.png" />
+    <Content Include="imgs\L2E.png" />
+    <Content Include="imgs\L3.png" />
+    <Content Include="imgs\L3E.png" />
+    <Content Include="imgs\L4.png" />
+    <Content Include="imgs\L4E.png" />
+    <Content Include="imgs\L5.png" />
+    <Content Include="imgs\L5E.png" />
+    <Content Include="imgs\L6.png" />
+    <Content Include="imgs\L6E.png" />
+    <Content Include="imgs\L7.png" />
+    <Content Include="imgs\L7E.png" />
+    <Content Include="imgs\L8.png" />
+    <Content Include="imgs\L8E.png" />
+    <Content Include="imgs\L9.png" />
+    <Content Include="imgs\L9E.png" />
+    <Content Include="imgs\R1.png" />
+    <Content Include="imgs\R10E.png" />
+    <Content Include="imgs\R11E.png" />
+    <Content Include="imgs\R1E.png" />
+    <Content Include="imgs\R2.png" />
+    <Content Include="imgs\R2E.png" />
+    <Content Include="imgs\R3.png" />
+    <Content Include="imgs\R3E.png" />
+    <Content Include="imgs\R4.png" />
+    <Content Include="imgs\R4E.png" />
+    <Content Include="imgs\R5.png" />
+    <Content Include="imgs\R5E.png" />
+    <Content Include="imgs\R6.png" />
+    <Content Include="imgs\R6E.png" />
+    <Content Include="imgs\R7.png" />
+    <Content Include="imgs\R7E.png" />
+    <Content Include="imgs\R8.png" />
+    <Content Include="imgs\R8E.png" />
+    <Content Include="imgs\R9.png" />
+    <Content Include="imgs\R9E.png" />
+    <Content Include="imgs\standing.png" />
+    <Content Include="__pycache__\MothersVengeance.cpython-38.pyc" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
