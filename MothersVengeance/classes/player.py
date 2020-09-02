@@ -2,9 +2,6 @@ import pygame
 
 class Player(object):
 	def __init__(self, x, y, width, height):
-		self.max_health = int(100)
-		self.current_health = int(50)
-		self.ammo = int(100)
 		self.x = x
 		self.y = y
 		self.width = width
@@ -15,27 +12,30 @@ class Player(object):
 		self.left = False
 		self.right = False
 		self.walkCount = 0
+		self.standCount = 0
 		self.standing = True
 		self.hitbox = (self.x + 12, self.y, self.width - 20, self.height)
-		self.walkRight = [pygame.image.load('./imgs/R1.png'), pygame.image.load('./imgs/R2.png'), pygame.image.load('./imgs/R3.png'), pygame.image.load('./imgs/R4.png'), pygame.image.load('./imgs/R5.png'), pygame.image.load('./imgs/R6.png'), pygame.image.load('./imgs/R7.png'), pygame.image.load('./imgs/R8.png'), pygame.image.load('./imgs/R9.png')]
-		self.walkLeft = [pygame.image.load('./imgs/L1.png'), pygame.image.load('./imgs/L2.png'), pygame.image.load('./imgs/L3.png'), pygame.image.load('./imgs/L4.png'), pygame.image.load('./imgs/L5.png'), pygame.image.load('./imgs/L6.png'), pygame.image.load('./imgs/L7.png'), pygame.image.load('./imgs/L8.png'), pygame.image.load('./imgs/L9.png')]
+		self.idleRight = [ pygame.image.load('./imgs/player/idle/Idle {}.png'.format(i)) for i in range(1,6)]
+		self.idleLeft = [ pygame.transform.flip(img, True, False) for img in self.idleRight]
+		self.walkRight = [ pygame.image.load('./imgs/player/walk/Walk {}.png'.format(i)) for i in range(1,9)]
+		self.walkLeft = [ pygame.transform.flip(img, True, False) for img in self.walkRight]
 
 	def draw(self, win):
-		if self.walkCount + 1 >= 27:
-			self.walkCount = 0
 
 		if not(self.standing):
 			if self.left:
-				win.blit(self.walkLeft[self.walkCount//3], (self.x, self.y))
-				self.walkCount += 1
+				win.blit(self.walkLeft[self.walkCount % len(self.walkRight)], (self.x, self.y))
 			elif self.right:
-				win.blit(self.walkRight[self.walkCount//3], (self.x, self.y))
-				self.walkCount += 1
+				win.blit(self.walkRight[self.walkCount % len(self.walkLeft)], (self.x, self.y))
+			self.walkCount = (self.walkCount + 1) % 30
+			self.standCount = 0
 		else:
 			if self.right:
-				win.blit(self.walkRight[0], (self.x, self.y))
+				win.blit(self.idleRight[self.standCount % len(self.idleRight)], (self.x, self.y))
 			else: 
-				win.blit(self.walkLeft[0], (self.x, self.y))
+				win.blit(self.idleLeft[self.standCount % len(self.idleLeft)], (self.x, self.y))
+			self.standCount = (self.standCount + 1) % 30
+			self.walkCount = 0
 		self.hitbox = (self.x + 12, self.y, self.width - 20, self.height)
 		#pygame.draw.rect(win, (255,0,0), self.hitbox, 2)
 
