@@ -161,8 +161,8 @@ def redrawGameWindow():
 	man.draw(win)
 	#goblin.draw(win)
 
-	for bullet in bullets:
-		bullet.draw(win)
+	#for bullet in bullets:
+	#	bullet.draw(win)
 
 
 	#win.blit(pygame.transform.scale(display, (canvas_width, canvas_height)), (0,0))
