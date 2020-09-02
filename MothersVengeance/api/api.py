@@ -1,15 +1,21 @@
 import pygame
 import sys
 sys.path.append('classes')
-import player, enemy, projectile
+import player, enemy, projectile, healthBar, ammoui
+
 #globals for the project
 canvas_width = 800
 canvas_height = 600
 
 bg = pygame.image.load('./imgs/bg.jpg')
-char = pygame.image.load('./imgs/standing.png')
 
 clock = pygame.time.Clock()
+ 
+pygame.mixer.init()
+pygame.mixer.music.load("./sounds/music.mp3")
+pygame.mixer.music.set_volume(0.1)
+pygame.mixer.music.play(-1)
+
 
 pygame.init()
 win = pygame.display.set_mode((canvas_width, canvas_height), 0, 32)
@@ -18,9 +24,10 @@ pygame.display.set_caption("MothersVengeance")
 #display = pygame.Surface((400,300))
 
 run = True
-man = player.Player(50, 400, 64, 64)
-goblin = enemy.Enemy(30, 300, 64, 64, 200)
-bullets = []
+font = pygame.font.SysFont('comicsans', 30, True)
+man = player.Player(50, 300, 64, 64)
+
+score = 0
 
 dirt_img = pygame.image.load('./imgs/tiles/dirt.png')
 grass_img = pygame.image.load('./imgs/tiles/grass.png')
@@ -168,5 +175,7 @@ def redrawGameWindow():
 def generate_projectile(facing):
 	return projectile.Projectile(round(man.x + man.width//2), round(man.y+ man.height//2), 6, (0, 0, 0), facing)
 
+	# UI on the top layer
 
+	pygame.display.update()
 
