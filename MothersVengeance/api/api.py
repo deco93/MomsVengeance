@@ -1,11 +1,14 @@
 import pygame
 import sys
+#import random
 sys.path.append('classes')
 import player, enemy, projectile, healthBar, ammoui
 
 #globals for the project
 canvas_width = 800
 canvas_height = 600
+
+even = True
 
 bg = pygame.image.load('./imgs/bg.jpg')
 backSky = pygame.image.load('./imgs/backSky.png')
@@ -40,7 +43,6 @@ player_gravity = 0
 collision_types = {'top': False, 'bottom': False, 'right': False, 'left': False}
 
 true_scroll = [0,0]
-
 
 game_map = [['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
 			['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
@@ -83,12 +85,56 @@ def collision_test(rect,tiles):
             hit_list.append(tile)
     return hit_list
 
+def switchEven():
+	global even
+	even = not even
+
+#can be called during camera move to plot the platforms alternately on left and right with order reveres from previous viewport
+def checkEvenOrOdd(current_platform):
+	global even
+	if even:
+		return current_platform % 2
+	else:
+		return not (current_platform % 2)
+
+def spawnUnitPlatform(current_platform_x, current_platform_y, tile_rects, scroll):
+	#win.blit(grass_img, (300 - scroll[0], -50 - scroll[1]))
+	#tile_rects.append(pygame.Rect(300 , -50  , 32, 32))
+	win.blit(grass_img, (current_platform_x  - scroll[0], current_platform_y - scroll[1]))
+	tile_rects.append(pygame.Rect(current_platform_x , current_platform_y  , 32, 32))
+	win.blit(grass_img, ((current_platform_x + 32)  - scroll[0], current_platform_y - scroll[1]))
+	tile_rects.append(pygame.Rect((current_platform_x + 32)  , current_platform_y , 32, 32))
+	win.blit(grass_img, ((current_platform_x + 64)  - scroll[0], current_platform_y - scroll[1]))
+	tile_rects.append(pygame.Rect((current_platform_x + 64) , current_platform_y , 32, 32))
+
+def spawnPlatforms(y_origin, platform_count, tile_rects, scroll):
+	#print(f'man.currentViewportLevel: {man.currentViewportLevel} yorigin: {y_origin}')
+	currentViewportLevel = man.currentViewportLevel
+	currentYOrigin = y_origin
+	while currentViewportLevel >= 0:
+		#print(f'---- currentViewportLevel: {currentViewportLevel}')
+		current_platform = 1
+		platform_y_offset = (canvas_height/platform_count) - (canvas_height/platform_count)/4
+		# randomly choosing whether to spawn current platform on left or right
+		while (currentViewportLevel > 0 and current_platform <= platform_count) or current_platform < platform_count:
+			if checkEvenOrOdd(current_platform):
+				current_platform_x = 220
+				#current_platform_x = 50
+			else:
+				current_platform_x = canvas_width - (220 + (16*3))
+				#current_platform_x = canvas_width - (50 + (16*3))
+			current_platform_y = currentYOrigin + (platform_y_offset * current_platform)
+			#spawn a series of 3 dirt tiles one after other to simulate a platform and check if the last platform for that frame it should spawn a bit lower eg here 70px
+			spawnUnitPlatform(current_platform_x, current_platform_y + 70 if current_platform == platform_count else current_platform_y, tile_rects, scroll)
+			current_platform += 1
+
+		currentViewportLevel -= 1
+		currentYOrigin += canvas_height
+	
 
 def redrawGameWindow():
-
-	#win.fill((0, 0, 122))
+	#win.blit(bg, (0 ,0))
 	win.blit(backSky, (0 ,0))
-
 	true_scroll[0] += (player_rect.x - true_scroll[0] - 300) / 20
 	true_scroll[1] += (player_rect.y - true_scroll[1] - 280) / 2
 	scroll = true_scroll.copy()
@@ -98,8 +144,9 @@ def redrawGameWindow():
 	#man.draw(display)
 	#goblin.draw(display)
 	#actually drawing the bullets from bullet spamming
-
+	
 	tile_rects = []
+	spawnPlatforms(man.maxYCoordinate, 4, tile_rects, scroll)
 	y = 0
 	for layer in game_map:
 		x = 0
@@ -124,6 +171,7 @@ def redrawGameWindow():
 
 	player_rect.x += player_movement[0]
 	hit_list = collision_test(player_rect, tile_rects)
+	#print("tile_rects length: "+ str(len(tile_rects)))
 	for tile in hit_list:
 		if man.right:
 			player_rect.right = tile.left
@@ -154,8 +202,12 @@ def redrawGameWindow():
 
 	man.x = player_rect.x - scroll[0]
 	man.y = player_rect.y - scroll[1]
+	#print(f'man.y {man.y} man.maxYCoordinate {man.maxYCoordinate} player_rect.y {player_rect.y}')
+	if (man.currentViewportLevel >0 and player_rect.y < man.maxYCoordinate) or (player_rect.y < man.maxYCoordinate):
+		man.maxYCoordinate -= canvas_height
+		man.currentViewportLevel += 1
+		#print("next viewportLevel ", man.currentViewportLevel)
 	man.draw(win)
-
 	pygame.display.update()
 
 

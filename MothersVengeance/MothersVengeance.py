@@ -9,6 +9,7 @@ from api.api import *
 air_time = 0
 jump_delta = -15 
 #main loop
+
 while run:
 	clock.tick(30)	#for setting FPS to 30
 

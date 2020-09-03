@@ -33,6 +33,8 @@ class Player(object):
 		self.walkAnimSpeed = 2
 		self.squishAnimSpeed = 10
 		self.isInAir = True
+		self.maxYCoordinate = 0 
+		self.currentViewportLevel = 0
 
 	def __increAnim(self, counter, length, frame, speed, repeat = False):
 		
