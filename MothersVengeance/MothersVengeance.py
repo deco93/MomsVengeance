@@ -7,6 +7,7 @@ from api.api import *
 
 #pygame.mixer.music.play(-1)
 #main loop
+
 while run:
 	clock.tick(30)	#for setting FPS to 30
 
@@ -57,6 +58,6 @@ while run:
 	# Gravity
 
 
-
+	
 	redrawGameWindow()
 pygame.quit()

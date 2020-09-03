@@ -1,11 +1,14 @@
 import pygame
 import sys
+#import random
 sys.path.append('classes')
 import player, enemy, projectile, healthBar, ammoui
 
 #globals for the project
 canvas_width = 800
 canvas_height = 600
+
+even = True
 
 bg = pygame.image.load('./imgs/bg.jpg')
 
@@ -104,18 +107,49 @@ def collision_test(rect,tiles):
             hit_list.append(tile)
     return hit_list
 
+def switchEven():
+	global even
+	even = not even
+
+#can be called during camera move to plot the platforms alternately on left and right with order reveres from previous viewport
+def checkEvenOrOdd(current_platform):
+	global even
+	if even:
+		return current_platform % 2
+	else:
+		return not (current_platform % 2)
+
+def spawnUnitPlatform(current_platform_x, current_platform_y):
+	win.blit(dirt_img, (current_platform_x, current_platform_y))
+	win.blit(dirt_img, (current_platform_x + 32, current_platform_y))
+	win.blit(dirt_img, (current_platform_x + 64, current_platform_y))
+
+def spawnPlatforms(y_origin, platform_count):
+	current_platform = 1
+	platform_y_offset = (canvas_height/platform_count) - (canvas_height/platform_count)/4
+	# randomly choosing whether to spawn current platform on left or right
+	while current_platform < platform_count:
+		if checkEvenOrOdd(current_platform):
+			current_platform_x = 50
+		else:
+			current_platform_x = canvas_width - (50 + (16*3))
+		current_platform_y = y_origin + (platform_y_offset * current_platform)
+		#spawn a series of 3 dirt tiles one after other to simulate a platform
+		spawnUnitPlatform(current_platform_x, current_platform_y)
+		current_platform += 1
+	
 
 def redrawGameWindow():
 
 	win.blit(bg, (0 ,0))
-
-
 
 	#man.draw(display)
 	#goblin.draw(display)
 	#actually drawing the bullets from bullet spamming
 
 	tile_rects = []
+	spawnPlatforms(0, 4)
+	
 	y = 0
 	for layer in game_map:
 		x = 0
