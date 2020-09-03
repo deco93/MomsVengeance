@@ -7,6 +7,7 @@ from api.api import *
 
 #pygame.mixer.music.play(-1)
 air_time = 0
+jump_delta = -15 
 #main loop
 while run:
 	clock.tick(30)	#for setting FPS to 30
@@ -37,15 +38,29 @@ while run:
 		man.walkCount = 0
 		man.vel = 0
 #if not(man.isJump):
-	if keys[pygame.K_UP]:
-		if man.jumpCount < 6:
-			man.gravity = -15
 
+
+	if keys[pygame.K_DOWN]:
+		if man.gravity in [0, 1]:
+			man.isSquish = True
+			man.vel = 0
+		else:
+			man.isSquish = False
+	else:
+		man.isSquish = False
+
+	if keys[pygame.K_SPACE]:
+		if man.jumpCount == 0:
+			if man.isSquish:
+				man.gravity = -25
+			else:
+				man.gravity = -15
+			print(man.isSquish)
 		#man.isJump = True
 		#man.left = False
 		#man.right = False
 		#man.walkCount = 0
-
+	
 	# else:
 	# 	if man.jumpCount >= 0:
 	#
@@ -56,8 +71,7 @@ while run:
 	# 		man.jumpCount = 2
 
 	# Gravity
-
-
-
+	print
+	print("jumpCount: %s, gravity: %s" % (man.jumpCount, man.gravity))
 	redrawGameWindow()
 pygame.quit()
