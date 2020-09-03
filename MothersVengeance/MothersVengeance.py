@@ -6,6 +6,7 @@ from api.api import *
 #pygame.mixer.music.load("./sounds/music.mp3")
 
 #pygame.mixer.music.play(-1)
+air_time = 0
 #main loop
 
 while run:
@@ -17,9 +18,7 @@ while run:
 
 	keys = pygame.key.get_pressed()
 
-	man.isJump = False
-	man.left = False
-	man.right = False
+
 
 		
 	if keys[pygame.K_LEFT] and man.x >= man.vel:
@@ -38,22 +37,24 @@ while run:
 		man.standing = True
 		man.walkCount = 0
 		man.vel = 0
-	if not(man.isJump):
-		if keys[pygame.K_UP]:
-			man.isJump = True
-			man.left = False
-			man.right = False
-			man.walkCount = 0
-	else:
-		if man.jumpCount >= -10:
-			neg = 1
-			if man.jumpCount < 0:
-				neg = -1
-			man.y -= int((man.jumpCount ** 2) * .5) * neg
-			man.jumpCount -= 1
-		else:
-			man.isJump = False
-			man.jumpCount = 10
+#if not(man.isJump):
+	if keys[pygame.K_UP]:
+		if man.jumpCount < 6:
+			man.gravity = -15
+
+		#man.isJump = True
+		#man.left = False
+		#man.right = False
+		#man.walkCount = 0
+
+	# else:
+	# 	if man.jumpCount >= 0:
+	#
+	# 		man.gravity = -10
+	# 		man.jumpCount -= 1
+	# 	else:
+	# 		man.isJump = False
+	# 		man.jumpCount = 2
 
 	# Gravity
 
