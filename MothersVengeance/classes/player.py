@@ -7,7 +7,7 @@ class Player(object):
 		self.width = width
 		self.height = height
 		self.vel = 5
-		self.jumpCount = 10
+		self.jumpCount = 0
 		self.isJump = False
 		self.left = False
 		self.right = False
@@ -21,20 +21,52 @@ class Player(object):
 		self.walkRight = [ pygame.image.load('./imgs/player/walk/Walk {}.png'.format(i)) for i in range(1,9)]
 		self.walkLeft = [ pygame.transform.flip(img, True, False) for img in self.walkRight]
 
+		self.idleAnimCount = 5
+		self.IdelAnimCounter = 0
+		self.currentIdleFrame = 0
+		self.walkAnimCount = 7
+		self.WalkAnimCounter = 0
+		self.currentWalkFrame = 0
+		self.animSpeed = 5
+		self.walkAnimSpeed = 2
+
+		self.isInAir = True
+
 	def draw(self, win):
+
+		if self.IdelAnimCounter >= self.animSpeed:
+			self.IdelAnimCounter = 0
+			self.currentIdleFrame += 1
+			if self.currentIdleFrame == self.idleAnimCount:
+				self.currentIdleFrame = 0
+		else:
+			self.IdelAnimCounter += 1
+
+		if self.WalkAnimCounter >= self.walkAnimSpeed:
+			self.WalkAnimCounter = 0
+			self.currentWalkFrame += 1
+			if self.currentWalkFrame == self.walkAnimCount:
+				self.currentWalkFrame = 0
+		else:
+			self.WalkAnimCounter += 1
+
 
 		if not(self.standing):
 			if self.left:
-				win.blit(self.walkLeft[self.walkCount % len(self.walkRight)], (self.x, self.y))
+				#win.blit(self.walkLeft[self.walkCount % len(self.walkRight)], (self.x, self.y))
+				win.blit(self.walkLeft[self.currentWalkFrame], (self.x, self.y))
 			elif self.right:
-				win.blit(self.walkRight[self.walkCount % len(self.walkLeft)], (self.x, self.y))
+				#win.blit(self.walkRight[self.walkCount % len(self.walkLeft)], (self.x, self.y))
+				win.blit(self.walkRight[self.currentWalkFrame], (self.x, self.y))
 			self.walkCount = (self.walkCount + 1) % 30
 			self.standCount = 0
 		else:
 			if self.right:
-				win.blit(self.idleRight[self.standCount % len(self.idleRight)], (self.x, self.y))
+				#win.blit(self.idleRight[self.standCount % len(self.idleRight)], (self.x, self.y))
+				win.blit(self.idleRight[self.currentIdleFrame], (self.x, self.y))
 			else: 
-				win.blit(self.idleLeft[self.standCount % len(self.idleLeft)], (self.x, self.y))
+				#win.blit(self.idleLeft[self.standCount % len(self.idleLeft)], (self.x, self.y))
+				win.blit(self.idleLeft[self.currentIdleFrame], (self.x, self.y))
 			self.standCount = (self.standCount + 1) % 30
 			self.walkCount = 0
 		self.hitbox = (self.x + 12, self.y, self.width - 20, self.height)
