@@ -56,25 +56,11 @@
     <Folder Include="sounds\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="api\__pycache__\" />
     <Folder Include="classes\" />
-    <Folder Include="classes\__pycache__\" />
     <Folder Include="fonts\" />
     <Folder Include="imgs\" />
-    <Folder Include="__pycache__\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="api\__pycache__\api.cpython-37.pyc" />
-    <Content Include="api\__pycache__\api.cpython-38.pyc" />
-    <Content Include="api\__pycache__\__init__.cpython-37.pyc" />
-    <Content Include="api\__pycache__\__init__.cpython-38.pyc" />
-    <Content Include="classes\__pycache__\enemy.cpython-37.pyc" />
-    <Content Include="classes\__pycache__\enemy.cpython-38.pyc" />
-    <Content Include="classes\__pycache__\player.cpython-37.pyc" />
-    <Content Include="classes\__pycache__\player.cpython-38.pyc" />
-    <Content Include="classes\__pycache__\projectile.cpython-37.pyc" />
-    <Content Include="classes\__pycache__\projectile.cpython-38.pyc" />
-    <Content Include="classes\__pycache__\__init__.cpython-38.pyc" />
     <Content Include="fonts\ShortBaby-Mg2w.ttf" />
     <Content Include="imgs\player\idle\Idle 1.png" />
     <Content Include="imgs\player\idle\Idle 2.png" />
@@ -92,7 +78,6 @@
     <Content Include="sounds\bullet.wav" />
     <Content Include="sounds\hit.wav" />
     <Content Include="sounds\music.mp3" />
-    <Content Include="__pycache__\MothersVengeance.cpython-38.pyc" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

@@ -118,10 +118,10 @@ def spawnPlatforms(y_origin, platform_count, tile_rects, scroll):
 		# randomly choosing whether to spawn current platform on left or right
 		while (currentViewportLevel > 0 and current_platform <= platform_count) or current_platform < platform_count:
 			if checkEvenOrOdd(current_platform):
-				current_platform_x = 300
+				current_platform_x = 220
 				#current_platform_x = 50
 			else:
-				current_platform_x = canvas_width - (300 + (16*3))
+				current_platform_x = canvas_width - (220 + (16*3))
 				#current_platform_x = canvas_width - (50 + (16*3))
 			current_platform_y = currentYOrigin + (platform_y_offset * current_platform)
 			#spawn a series of 3 dirt tiles one after other to simulate a platform and check if the last platform for that frame it should spawn a bit lower eg here 70px
@@ -164,8 +164,8 @@ def redrawGameWindow():
 	player_movement[0] += man.vel
 	player_movement[1] += man.gravity
 	man.gravity += 1
-	if man.gravity > 15:
-		man.gravity = 15
+	if man.gravity > 20:
+		man.gravity = 20
 
 	collision_types = {'top': False, 'bottom': False, 'right': False, 'left': False}
 
