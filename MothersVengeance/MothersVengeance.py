@@ -55,7 +55,7 @@ while run:
 				man.gravity = -25
 			else:
 				man.gravity = -15
-			print(man.isSquish)
+			# print(man.isSquish)
 		#man.isJump = True
 		#man.left = False
 		#man.right = False
@@ -71,7 +71,6 @@ while run:
 	# 		man.jumpCount = 2
 
 	# Gravity
-	print
-	print("jumpCount: %s, gravity: %s" % (man.jumpCount, man.gravity))
+
 	redrawGameWindow()
 pygame.quit()
