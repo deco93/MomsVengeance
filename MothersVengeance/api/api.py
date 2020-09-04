@@ -5,8 +5,8 @@ sys.path.append('classes')
 import player, enemy, projectile, healthBar, ammoui
 
 #globals for the project
-canvas_width = 800
-canvas_height = 600
+canvas_width = 600
+canvas_height = 800
 
 even = True
 
