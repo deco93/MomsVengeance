@@ -12,6 +12,9 @@ even = True
 
 bg = pygame.image.load('./imgs/bg.jpg')
 backSky = pygame.image.load('./imgs/backSky.png')
+backSky = pygame.transform.scale(backSky, (600, 1200))
+
+Sky = pygame.image.load('./imgs/Sky.png')
 
 clock = pygame.time.Clock()
  
@@ -134,13 +137,13 @@ def spawnPlatforms(y_origin, platform_count, tile_rects, scroll):
 
 def redrawGameWindow():
 	#win.blit(bg, (0 ,0))
-	win.blit(backSky, (0 ,0))
+
 	true_scroll[0] += (player_rect.x - true_scroll[0] - 300) / 20
 	true_scroll[1] += (player_rect.y - true_scroll[1] - 280) / 2
 	scroll = true_scroll.copy()
 	scroll[0] = int(scroll[0])
 	scroll[1] = int(scroll[1])
-
+	win.blit(Sky, (0 ,-1400 - scroll[1]/10))
 	#man.draw(display)
 	#goblin.draw(display)
 	#actually drawing the bullets from bullet spamming
@@ -202,6 +205,7 @@ def redrawGameWindow():
 
 	man.x = player_rect.x - scroll[0]
 	man.y = player_rect.y - scroll[1]
+
 	#print(f'man.y {man.y} man.maxYCoordinate {man.maxYCoordinate} player_rect.y {player_rect.y}')
 	if (man.currentViewportLevel >0 and player_rect.y < man.maxYCoordinate) or (player_rect.y < man.maxYCoordinate):
 		man.maxYCoordinate -= canvas_height
