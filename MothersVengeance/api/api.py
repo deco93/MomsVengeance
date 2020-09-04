@@ -164,8 +164,12 @@ def redrawGameWindow():
 	player_movement[0] += man.vel
 	player_movement[1] += man.gravity
 	man.gravity += 1
-	if man.gravity > 20:
-		man.gravity = 20
+	if man.isBubbled:
+		if man.gravity > player.MAXIMUM_BUBBLED_DROP_SPEED:
+			man.gravity = player.MAXIMUM_BUBBLED_DROP_SPEED
+	else:
+		if man.gravity > player.MAXIMUM_DROP_SPEED:
+			man.gravity = player.MAXIMUM_DROP_SPEED
 
 	collision_types = {'top': False, 'bottom': False, 'right': False, 'left': False}
 

@@ -40,7 +40,6 @@ while run:
 		man.vel = 0
 #if not(man.isJump):
 
-
 	if keys[pygame.K_DOWN]:
 		if man.gravity in [0, 1]:
 			man.isSquish = True
@@ -53,9 +52,27 @@ while run:
 	if keys[pygame.K_SPACE]:
 		if man.jumpCount == 0:
 			if man.isSquish:
-				man.gravity = -25
+				man.gravity = -15 * man.currentSquishFrame
 			else:
 				man.gravity = -15
+
+	# key UP for long jump in the air.
+	if keys[pygame.K_UP]:
+		# in_air and dropping
+		if man.jumpCount > 2 and man.gravity > 0:
+			man.isBubbled = True
+		else:
+			man.isBubbled = False
+	else:
+		man.isBubbled = False
+	# print(man.isBubbled)
+	# key x, c for left, right dash
+	if keys[pygame.K_x]:
+		pass
+
+	if keys[pygame.K_c]:
+		pass
+
 			# print(man.isSquish)
 		#man.isJump = True
 		#man.left = False
