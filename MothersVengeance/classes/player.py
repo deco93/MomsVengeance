@@ -1,5 +1,7 @@
 import pygame
 
+DASH_COOL_DOWN = 8
+DASH_DELTA_X= 20
 MAXIMUM_DROP_SPEED = 15
 MAXIMUM_BUBBLED_DROP_SPEED = 3
 
@@ -11,6 +13,8 @@ class Player(object):
 		self.height = height
 		self.vel = 5
 		self.jumpCount = 0
+		self.dashCount = 0
+		self.isDash = False
 		self.isBubbled = False
 		self.isSquish = False
 		self.isJump = False

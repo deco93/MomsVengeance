@@ -171,6 +171,8 @@ def redrawGameWindow():
 		if man.gravity > player.MAXIMUM_DROP_SPEED:
 			man.gravity = player.MAXIMUM_DROP_SPEED
 
+
+
 	collision_types = {'top': False, 'bottom': False, 'right': False, 'left': False}
 
 	player_rect.x += player_movement[0]
@@ -212,6 +214,13 @@ def redrawGameWindow():
 		man.currentViewportLevel += 1
 		#print("next viewportLevel ", man.currentViewportLevel)
 	man.draw(win)
+
+	# Dash Cool Down
+	# decrease counter by 1
+	man.dashCount = max(man.dashCount - 1, 0)
+	if man.dashCount == 0:
+		man.isDash = False
+
 	pygame.display.update()
 
 
