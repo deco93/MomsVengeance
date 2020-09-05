@@ -31,6 +31,7 @@ pygame.display.set_caption("MothersVengeance")
 #display = pygame.Surface((400,300))
 
 run = True
+TitleFont = pygame.font.SysFont('comicsans', 45, True)
 font = pygame.font.SysFont('comicsans', 30, True)
 man = player.Player(50, 300, 64, 64)
 
@@ -46,6 +47,10 @@ player_gravity = 0
 collision_types = {'top': False, 'bottom': False, 'right': False, 'left': False}
 
 true_scroll = [0,0]
+
+run = True
+
+gameStates = 0
 
 game_map = [['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
 			['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
@@ -133,10 +138,19 @@ def spawnPlatforms(y_origin, platform_count, tile_rects, scroll):
 
 		currentViewportLevel -= 1
 		currentYOrigin += canvas_height
-	
+
+
+def DrawText(text, font, color, surface, x, y):
+	textObj = font.render(text, 1, color)
+	textRect = textObj.get_rect()
+	textRect.topleft = (x, y)
+	win.blit(textObj, textRect)
+
+
+
+
 
 def redrawGameWindow():
-	#win.blit(bg, (0 ,0))
 
 	true_scroll[0] += (player_rect.x - true_scroll[0] - 300) / 20
 	true_scroll[1] += (player_rect.y - true_scroll[1] - 280) / 2
@@ -147,7 +161,7 @@ def redrawGameWindow():
 	#man.draw(display)
 	#goblin.draw(display)
 	#actually drawing the bullets from bullet spamming
-	
+
 	tile_rects = []
 	spawnPlatforms(man.maxYCoordinate, 4, tile_rects, scroll)
 	y = 0
@@ -213,6 +227,7 @@ def redrawGameWindow():
 		#print("next viewportLevel ", man.currentViewportLevel)
 	man.draw(win)
 	pygame.display.update()
+
 
 
 

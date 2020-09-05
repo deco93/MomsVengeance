@@ -7,11 +7,103 @@ from api.api import *
 
 #pygame.mixer.music.play(-1)
 air_time = 0
-jump_delta = -15 
-#main loop
+jump_delta = -15
 
+win = pygame.display.set_mode((canvas_width, canvas_height), 1, 32)
+
+gameStates = 0
+selectedGameMenus = 0
+
+def DrawText(text, font, color, surface, x, y):
+	textObj = font.render(text, 1, color)
+	textRect = textObj.get_rect()
+	textRect.topleft = (x, y)
+	win.blit(textObj, textRect)
+
+
+
+#main loop
 while run:
+
+
 	clock.tick(30)	#for setting FPS to 30
+
+	################ Menu Code ###############
+	while(gameStates == 0):
+		win.fill((0,0,0))
+		DrawText("Putty Mama", TitleFont, (255, 255, 255), win, 210, 100)
+
+		events = pygame.event.get()
+		for event in events:
+			if event.type == pygame.QUIT:
+				pygame.quit()
+				sys.exit()
+			# if event.type == pygame.KEYDOWN:
+			# 	if event.key == pygame.K_RETURN:
+			# 		gameStates+=1
+
+		keys = pygame.key.get_pressed()
+
+		if(selectedGameMenus == 0):
+			DrawText("Press Enter To Play", font, (255, 0, 0), win, 200, 300)
+			DrawText("Credits", font, (255, 255, 255), win, 250, 400)
+			for event in events:
+				if event.type == pygame.KEYDOWN:
+					if event.key == pygame.K_DOWN or event.key == pygame.K_UP:
+						selectedGameMenus += 1
+						break
+					elif event.key == pygame.K_RETURN:
+						gameStates = 1
+						break
+
+			if(selectedGameMenus == 1):
+				continue
+
+		if(selectedGameMenus == 1):
+			DrawText("Press Enter To Play", font, (255, 255, 255), win, 200, 300)
+			DrawText("Credits", font, (255, 0, 0), win, 250, 400)
+			for event in events:
+				if event.type == pygame.KEYDOWN:
+					if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+						selectedGameMenus -= 1
+						break
+
+					elif event.key == pygame.K_RETURN:
+						selectedGameMenus = 2
+						break
+
+			if selectedGameMenus == 0:
+				continue
+
+			if selectedGameMenus == 2:
+				continue
+
+		if(selectedGameMenus == 2):
+			DrawText("Zhengyuan Huang", font, (255, 255, 255), win, 200, 150)
+			DrawText("Renee Linford", font, (255, 255, 255), win, 200, 180)
+			DrawText("Brandon Montero", font, (255, 255, 255), win, 200, 210)
+			DrawText("Saransh Wali", font, (255, 255, 255), win, 200, 240)
+			DrawText("Pengxi Wang (Pix)", font, (255, 255, 255), win, 200, 270)
+			DrawText("Haotian Zhang", font, (255, 255, 255), win, 200, 300)
+
+			DrawText("Return", font, (255, 0, 0), win, 230, 500)
+
+			for event in events:
+				if event.type == pygame.KEYDOWN:
+					if event.key == pygame.K_RETURN:
+						selectedGameMenus -= 1
+						break
+
+		pygame.display.update()
+
+	################ End Of Menu Code ###############
+
+
+
+
+
+
+
 
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
@@ -21,7 +113,7 @@ while run:
 
 
 
-		
+
 	if keys[pygame.K_LEFT] and man.x >= man.vel:
 		#man.x -= man.vel
 		man.vel = -5
@@ -61,7 +153,7 @@ while run:
 		#man.left = False
 		#man.right = False
 		#man.walkCount = 0
-	
+
 	# else:
 	# 	if man.jumpCount >= 0:
 	#
