@@ -87,12 +87,12 @@ while run:
 	if man.isDash:
 		man.standing = False
 		if man.left and man.x >= man.vel:
-			man.vel = -player.DASH_DELTA_X
+			man.vel = -(player.DASH_DELTA_X-man.currentDashFrame)
 		elif man.right and man.x < canvas_width - man.width:
-			man.vel = player.DASH_DELTA_X
+			man.vel = player.DASH_DELTA_X-man.currentDashFrame
 		else:
 			man.vel = 0
-	print('dashcount: %s, isDash %s, vel: %s' %(man.dashCount, man.isDash, man.vel))
+	# print('dashcount: %s, isDash %s, vel: %s' %(man.dashCount, man.isDash, man.vel))
 			# print(man.isSquish)
 		#man.isJump = True
 		#man.left = False

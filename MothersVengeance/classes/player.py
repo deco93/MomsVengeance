@@ -1,7 +1,7 @@
 import pygame
 
-DASH_COOL_DOWN = 8
-DASH_DELTA_X= 20
+DASH_COOL_DOWN = 17
+DASH_DELTA_X= 17
 MAXIMUM_DROP_SPEED = 15
 MAXIMUM_BUBBLED_DROP_SPEED = 3
 
@@ -33,8 +33,12 @@ class Player(object):
 		self.squishLeft = [ pygame.transform.flip(img, True, False) for img in self.squishRight]
 		self.bubbleRight = [pygame.image.load('./imgs/player/bubble/Bubble {}.png'.format(i)) for i in range(1,5)]
 		self.bubbleLeft = [ pygame.transform.flip(img, True, False) for img in self.bubbleRight]
+		self.dashRight = [pygame.image.load('./imgs/player/dash/dash {}.png'.format(i)) for i in range(1,18)]
+		self.dashLeft = [ pygame.transform.flip(img, True, False) for img in self.dashRight]
 		
 		# Counters and others
+		self.dashAnimCounter = 0
+		self.currentDashFrame = 0
 		self.BubbleAnimCounter = 0
 		self.currentBubbleFrame = 0
 		self.IdleAnimCounter = 0
@@ -47,6 +51,7 @@ class Player(object):
 		self.walkAnimSpeed = 2
 		self.squishAnimSpeed = 7
 		self.BubbleAnimSpeed = 3
+		self.dashAnimSpeed = 1
 		self.isInAir = True
 		self.maxYCoordinate = 0 
 		self.currentViewportLevel = 0
@@ -72,6 +77,7 @@ class Player(object):
 		self.__increAnim('WalkAnimCounter', len(self.walkRight), 'currentWalkFrame', self.walkAnimSpeed, repeat= True)
 		self.__increAnim('squishAnimCounter', len(self.squishRight), 'currentSquishFrame', self.squishAnimSpeed, repeat= False)
 		self.__increAnim('BubbleAnimCounter', len(self.bubbleRight), 'currentBubbleFrame', self.BubbleAnimSpeed, repeat= False)
+		self.__increAnim('dashAnimCounter', len(self.dashRight), 'currentDashFrame', self.dashAnimSpeed, repeat= False)
 
 		if self.isSquish:
 			if self.left:
@@ -79,11 +85,20 @@ class Player(object):
 			elif self.right:
 				win.blit(self.squishRight[self.currentSquishFrame], (self.x, self.y))
 			self.currentBubbleFrame = 0
+			self.currentDashFrame = 0
 		elif self.isBubbled:
 			if self.left:
 				win.blit(self.bubbleLeft[self.currentBubbleFrame], (self.x, self.y))
 			elif self.right:
 				win.blit(self.bubbleRight[self.currentBubbleFrame], (self.x, self.y))
+			self.currentSquishFrame = 0
+			self.currentDashFrame = 0
+		elif self.isDash:
+			if self.left:
+				win.blit(self.dashLeft[self.currentDashFrame], (self.x, self.y))
+			elif self.right:
+				win.blit(self.dashRight[self.currentDashFrame], (self.x, self.y))
+			self.currentBubbleFrame = 0
 			self.currentSquishFrame = 0
 		elif not(self.standing):
 			if self.left:
@@ -94,6 +109,7 @@ class Player(object):
 				win.blit(self.walkRight[self.currentWalkFrame], (self.x, self.y))
 			self.currentBubbleFrame = 0
 			self.currentSquishFrame = 0
+			self.currentDashFrame = 0
 		else:
 			if self.right:
 				#win.blit(self.idleRight[self.standCount % len(self.idleRight)], (self.x, self.y))
@@ -103,6 +119,7 @@ class Player(object):
 				win.blit(self.idleLeft[self.currentIdleFrame], (self.x, self.y))
 			self.currentBubbleFrame = 0
 			self.currentSquishFrame = 0
+			self.currentDashFrame = 0
 		self.hitbox = (self.x + 12, self.y, self.width - 20, self.height)
 		#pygame.draw.rect(win, (255,0,0), self.hitbox, 2)
 
