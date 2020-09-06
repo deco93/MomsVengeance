@@ -11,7 +11,9 @@ jump_delta = -15
 
 win = pygame.display.set_mode((canvas_width, canvas_height), 1, 32)
 
+## Game States 0 For Starting Menu, 1 For Running Game, 2 For Game Lose Menu
 gameStates = 0
+
 selectedGameMenus = 0
 
 def DrawText(text, font, color, surface, x, y):
@@ -25,12 +27,10 @@ def DrawText(text, font, color, surface, x, y):
 #main loop
 while run:
 
-
 	clock.tick(30)	#for setting FPS to 30
-
-	################ Menu Code ###############
+	######################### Menu Code ########################
 	while(gameStates == 0):
-		win.fill((0,0,0))
+		win.blit(Sky)
 		DrawText("Putty Mama", TitleFont, (255, 255, 255), win, 210, 100)
 
 		events = pygame.event.get()
@@ -38,9 +38,6 @@ while run:
 			if event.type == pygame.QUIT:
 				pygame.quit()
 				sys.exit()
-			# if event.type == pygame.KEYDOWN:
-			# 	if event.key == pygame.K_RETURN:
-			# 		gameStates+=1
 
 		keys = pygame.key.get_pressed()
 
@@ -96,22 +93,13 @@ while run:
 
 		pygame.display.update()
 
-	################ End Of Menu Code ###############
-
-
-
-
-
-
-
+	###################### End Of Menu Code ######################
 
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			run = False
 
 	keys = pygame.key.get_pressed()
-
-
 
 
 	if keys[pygame.K_LEFT] and man.x >= man.vel:
@@ -130,7 +118,6 @@ while run:
 		man.standing = True
 		man.walkCount = 0
 		man.vel = 0
-#if not(man.isJump):
 
 
 	if keys[pygame.K_DOWN]:
@@ -148,22 +135,8 @@ while run:
 				man.gravity = -25
 			else:
 				man.gravity = -15
-			# print(man.isSquish)
-		#man.isJump = True
-		#man.left = False
-		#man.right = False
-		#man.walkCount = 0
-
-	# else:
-	# 	if man.jumpCount >= 0:
-	#
-	# 		man.gravity = -10
-	# 		man.jumpCount -= 1
-	# 	else:
-	# 		man.isJump = False
-	# 		man.jumpCount = 2
-
-	# Gravity
 
 	redrawGameWindow()
+
+
 pygame.quit()

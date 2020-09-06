@@ -15,6 +15,8 @@ class Player(object):
 		self.standing = True
 		self.gravity = 0
 		self.hitbox = (self.x + 12, self.y, self.width - 20, self.height)
+		self.maxHealth = 200
+		self.currentHealth = self.maxHealth
 
 		self.idleRight = [ pygame.image.load('./imgs/player/idle/Idle {}.png'.format(i)) for i in range(1,6)]
 		self.idleLeft = [ pygame.transform.flip(img, True, False) for img in self.idleRight]

@@ -162,6 +162,8 @@ def redrawGameWindow():
 	#goblin.draw(display)
 	#actually drawing the bullets from bullet spamming
 
+
+
 	tile_rects = []
 	spawnPlatforms(man.maxYCoordinate, 4, tile_rects, scroll)
 	y = 0
@@ -226,6 +228,13 @@ def redrawGameWindow():
 		man.currentViewportLevel += 1
 		#print("next viewportLevel ", man.currentViewportLevel)
 	man.draw(win)
+
+
+	################### Draw Health Bar ####################
+	pygame.draw.rect(win, (255, 0, 0), (20, 20, man.maxHealth, 20))
+	pygame.draw.rect(win, (0, 255, 0), (20, 20, man.currentHealth, 20))
+	################### End Of Draw Health Bar #############
+
 	pygame.display.update()
 
 
