@@ -38,6 +38,14 @@ grass_img = pygame.image.load('./imgs/tiles/grass.png')
 dirt_img = pygame.transform.scale(dirt_img, (32, 32))
 grass_img = pygame.transform.scale(grass_img, (32, 32))
 
+
+branch_body = pygame.image.load('./imgs/tiles/Branch_Body.png')
+branch_start_left = pygame.image.load('./imgs/tiles/Branch_Start.png')
+branch_start_right = pygame.transform.flip(branch_start_left, True, False)
+branch_end_right = pygame.image.load('./imgs/tiles/Branch_End_New.png')
+branch_end_left = pygame.transform.flip(branch_end_right, True, False)
+
+
 player_rect = pygame.Rect(300,300,48,64)
 player_gravity = 0
 collision_types = {'top': False, 'bottom': False, 'right': False, 'left': False}
@@ -154,7 +162,30 @@ def redrawGameWindow():
 			if tile == '1':
 				win.blit(dirt_img, (x * 32 - scroll[0], y * 32 - scroll[1]))
 			if tile == '2':
-				win.blit(grass_img, (x * 32 - scroll[0], y * 32 - scroll[1]))
+				# Check tile left & right
+				# LHS of screen
+				if x < 10:
+					# check if the tile the right most branch tile
+					if layer[x+1] != '2':
+						win.blit(branch_start_right,(x * 32 - scroll[0], y * 32 - scroll[1]))
+					# check if the tile the left most branch tile
+					elif x == 0 or layer[x-1] != '2':
+						win.blit(branch_end_left,(x * 32 - scroll[0], y * 32 - scroll[1]))
+					# if it's in the middle, render it as body
+					else:
+						win.blit(branch_body,(x * 32 - scroll[0], y * 32 - scroll[1]))
+				# win.blit(grass_img, (x * 32 - scroll[0], y * 32 - scroll[1]))
+				# RHS of screen 
+				else:
+					# check if the tile the right most branch tile
+					if layer[x-1] != '2':
+						win.blit(branch_start_left,(x * 32 - scroll[0], y * 32 - scroll[1]))
+					# check if the tile the left most branch tile
+					elif x == len(layer) - 1 or layer[x+1] != '2':
+						win.blit(branch_end_right,(x * 32 - scroll[0], y * 32 - scroll[1]))
+					# if it's in the middle, render it as body
+					else:
+						win.blit(branch_body,(x * 32 - scroll[0], y * 32 - scroll[1]))
 			if tile != '0':
 				tile_rects.append(pygame.Rect(x * 32, y * 32, 32, 32))
 			x += 1
