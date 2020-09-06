@@ -16,6 +16,9 @@ backSky = pygame.transform.scale(backSky, (600, 1200))
 
 Sky = pygame.image.load('./imgs/Sky.png')
 
+TreeTrunk = pygame.image.load('./imgs/tiles/NewTrunk.png')
+TreeTrunk = pygame.transform.scale(TreeTrunk, (300, 2400))
+
 clock = pygame.time.Clock()
  
 pygame.mixer.init()
@@ -49,6 +52,36 @@ branch_start_right = pygame.transform.flip(branch_start_left, True, False)
 branch_end_right = pygame.image.load('./imgs/tiles/Branch_End_New.png')
 branch_end_left = pygame.transform.flip(branch_end_right, True, False)
 
+branch_moss = pygame.image.load('./imgs/tiles/Branch_Moss.png')
+
+putty_baby = pygame.image.load('./imgs/PuttyBaby.png')
+putty_baby = pygame.transform.scale(putty_baby, (96, 96))
+
+bird_fly = [pygame.image.load('./imgs/Magpie/Fly1.gif'), pygame.image.load('./imgs/Magpie/Fly2.gif'), pygame.image.load('./imgs/Magpie/Fly3.gif')]
+bird_fly = [pygame.transform.scale(bird_fly[0], (128, 128)), pygame.transform.scale(bird_fly[1], (128, 128)), pygame.transform.scale(bird_fly[2], (128, 128))]
+bird_fly = [pygame.transform.flip(img, True, False) for img in bird_fly]
+
+bird_catch = [pygame.image.load('./imgs/Magpie/Catch0.gif'),
+			  pygame.image.load('./imgs/Magpie/Catch1.gif'),
+			  pygame.image.load('./imgs/Magpie/Catch2.gif'),
+			  pygame.image.load('./imgs/Magpie/Catch3.gif'),
+			  pygame.image.load('./imgs/Magpie/Catch4.gif'),
+			  pygame.image.load('./imgs/Magpie/Catch5.gif'),
+			  pygame.image.load('./imgs/Magpie/Catch6.gif'),
+			  pygame.image.load('./imgs/Magpie/Catch7.gif'),
+			  pygame.image.load('./imgs/Magpie/Catch8.gif')]
+
+bird_catch = [pygame.transform.scale(bird_catch[0], (128, 128)),
+			  pygame.transform.scale(bird_catch[1], (128, 128)),
+			  pygame.transform.scale(bird_catch[2], (128, 128)),
+			  pygame.transform.scale(bird_catch[3], (128, 128)),
+			  pygame.transform.scale(bird_catch[4], (128, 128)),
+			  pygame.transform.scale(bird_catch[5], (128, 128)),
+			  pygame.transform.scale(bird_catch[6], (128, 128)),
+			  pygame.transform.scale(bird_catch[7], (128, 128)),
+			  pygame.transform.scale(bird_catch[8], (128, 128))]
+
+bird_catch = [pygame.transform.flip(img, True, False) for img in bird_catch]
 
 player_rect = pygame.Rect(300,300,48,64)
 player_gravity = 0
@@ -165,7 +198,9 @@ def redrawGameWindow():
 	scroll = true_scroll.copy()
 	scroll[0] = int(scroll[0])
 	scroll[1] = int(scroll[1])
-	win.blit(Sky, (0 ,-1400 - scroll[1]/10))
+	win.blit(Sky, (0 ,-1400 - scroll[1]/5))
+	win.blit(TreeTrunk, (150, -1600 - scroll[1]))
+
 	#man.draw(display)
 	#goblin.draw(display)
 	#actually drawing the bullets from bullet spamming
@@ -179,32 +214,32 @@ def redrawGameWindow():
 		x = 0
 		for tile in layer:
 			if tile == '1':
-				win.blit(dirt_img, (x * 32 - scroll[0], y * 32 - scroll[1]))
+				win.blit(dirt_img, (x * 32, y * 32 - scroll[1]))
 			if tile == '2':
 				# Check tile left & right
 				# LHS of screen
 				if x < 10:
 					# check if the tile the right most branch tile
 					if layer[x+1] != '2':
-						win.blit(branch_start_right,(x * 32 - scroll[0], y * 32 - scroll[1]))
+						win.blit(branch_start_right,(x * 32, y * 32 - scroll[1]))
 					# check if the tile the left most branch tile
 					elif x == 0 or layer[x-1] != '2':
-						win.blit(branch_end_left,(x * 32 - scroll[0], y * 32 - scroll[1]))
+						win.blit(branch_end_left,(x * 32, y * 32 - scroll[1]))
 					# if it's in the middle, render it as body
 					else:
-						win.blit(branch_body,(x * 32 - scroll[0], y * 32 - scroll[1]))
+						win.blit(branch_body,(x * 32, y * 32 - scroll[1]))
 				# win.blit(grass_img, (x * 32 - scroll[0], y * 32 - scroll[1]))
 				# RHS of screen 
 				else:
 					# check if the tile the right most branch tile
 					if layer[x-1] != '2':
-						win.blit(branch_start_left,(x * 32 - scroll[0], y * 32 - scroll[1]))
+						win.blit(branch_start_left,(x * 32, y * 32 - scroll[1]))
 					# check if the tile the left most branch tile
 					elif x == len(layer) - 1 or layer[x+1] != '2':
-						win.blit(branch_end_right,(x * 32 - scroll[0], y * 32 - scroll[1]))
+						win.blit(branch_end_right,(x * 32, y * 32 - scroll[1]))
 					# if it's in the middle, render it as body
 					else:
-						win.blit(branch_body,(x * 32 - scroll[0], y * 32 - scroll[1]))
+						win.blit(branch_body,(x * 32, y * 32 - scroll[1]))
 			if tile != '0':
 				tile_rects.append(pygame.Rect(x * 32, y * 32, 32, 32))
 			x += 1

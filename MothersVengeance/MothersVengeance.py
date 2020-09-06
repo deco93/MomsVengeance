@@ -16,6 +16,22 @@ gameStates = 0
 
 selectedGameMenus = 0
 
+birdAnimCounter = 0
+birdAnimSpeed = 5
+birdAnimFrame = 0
+
+birdStartLocation = (0, 0)
+birdLandLocation = (310, 230)
+birdCurrentLocationX = birdStartLocation[0]
+birdCurrentLocationY = birdStartLocation[1]
+
+bird_Current_Frame = bird_catch[0]
+
+babyLocation = (400, 265)
+differenceX = babyLocation[0] - birdLandLocation[0]
+differenceY = babyLocation[1] - birdLandLocation[1]
+
+
 def DrawText(text, font, color, surface, x, y):
 	textObj = font.render(text, 1, color)
 	textRect = textObj.get_rect()
@@ -30,7 +46,43 @@ while run:
 	clock.tick(30)	#for setting FPS to 30
 	######################### Menu Code ########################
 	while(gameStates == 0):
-		win.blit(Sky)
+		win.blit(Sky, (0 ,-1400))
+		win.blit(TreeTrunk, (150, -1600))
+
+		win.blit(branch_body, (300, 350))
+		win.blit(branch_moss, (332, 350))
+		win.blit(branch_moss, (364, 350))
+		win.blit(branch_body, (396, 350))
+		win.blit(branch_body, (428, 350))
+		win.blit(branch_end_right, (460, 350))
+
+
+
+		if(birdAnimCounter >= birdAnimSpeed):
+			birdAnimCounter = 0
+			birdAnimFrame += 1
+		else:
+			birdAnimCounter += 1
+
+		if(birdCurrentLocationX < birdLandLocation[0]):
+			birdCurrentLocationX += birdLandLocation[0] / 200
+			birdCurrentLocationY += birdLandLocation[1] / 200
+			win.blit(bird_fly[birdAnimFrame % 3], (birdCurrentLocationX, birdCurrentLocationY))
+			win.blit(putty_baby, babyLocation)
+
+		elif(bird_Current_Frame != bird_catch[8]):
+			bird_Current_Frame = bird_catch[birdAnimFrame % 9]
+			win.blit(bird_catch[birdAnimFrame % 9], (birdCurrentLocationX, birdCurrentLocationY))
+			win.blit(putty_baby, babyLocation)
+		else:
+			birdCurrentLocationX += birdLandLocation[0] / 200
+			birdCurrentLocationY -= birdLandLocation[1] / 200
+
+
+
+			win.blit(bird_fly[birdAnimFrame % 3], (birdCurrentLocationX, birdCurrentLocationY))
+			win.blit(putty_baby, (birdCurrentLocationX + differenceX, birdCurrentLocationY + differenceY))
+
 		DrawText("Putty Mama", TitleFont, (255, 255, 255), win, 210, 100)
 
 		events = pygame.event.get()
