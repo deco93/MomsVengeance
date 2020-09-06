@@ -12,6 +12,9 @@ even = True
 
 bg = pygame.image.load('./imgs/bg.jpg')
 backSky = pygame.image.load('./imgs/backSky.png')
+backSky = pygame.transform.scale(backSky, (600, 1200))
+
+Sky = pygame.image.load('./imgs/Sky.png')
 
 clock = pygame.time.Clock()
  
@@ -28,6 +31,7 @@ pygame.display.set_caption("MothersVengeance")
 #display = pygame.Surface((400,300))
 
 run = True
+TitleFont = pygame.font.SysFont('comicsans', 45, True)
 font = pygame.font.SysFont('comicsans', 30, True)
 man = player.Player(50, 300, 64, 64)
 
@@ -52,6 +56,10 @@ collision_types = {'top': False, 'bottom': False, 'right': False, 'left': False}
 
 true_scroll = [0,0]
 
+run = True
+
+gameStates = 0
+
 game_map = [['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
 			['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
 			['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
@@ -73,8 +81,8 @@ game_map = [['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'
             ['0','0','1','1','0','0','0','0','2','2','2','2','2','0','0','0','0','1','1','0','0','0','0','0','0'],
             ['0','0','1','1','0','0','0','0','0','0','0','0','0','0','0','0','0','1','1','0','0','0','0','0','0'],
             ['0','0','1','1','0','0','0','0','0','0','0','0','0','0','0','0','0','1','1','0','0','0','0','0','0'],
-            ['2','2','1','1','0','0','0','0','0','0','0','0','0','0','0','0','0','1','1','0','0','0','0','0','0','1','1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
-            ['1','1','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','1','1','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2'],
+            ['2','2','1','1','0','0','0','0','0','0','0','0','0','0','0','0','0','1','1','0','0','0','0','0','0','2','2','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
+            ['1','1','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','1','1','2','2','2','2','2','2','1','1','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2'],
             ['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1'],
 			['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1'],
 			['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1'],
@@ -138,21 +146,30 @@ def spawnPlatforms(y_origin, platform_count, tile_rects, scroll):
 
 		currentViewportLevel -= 1
 		currentYOrigin += canvas_height
-	
+
+
+def DrawText(text, font, color, surface, x, y):
+	textObj = font.render(text, 1, color)
+	textRect = textObj.get_rect()
+	textRect.topleft = (x, y)
+	win.blit(textObj, textRect)
+
+
+
+
 
 def redrawGameWindow():
-	#win.blit(bg, (0 ,0))
-	win.blit(backSky, (0 ,0))
+
 	true_scroll[0] += (player_rect.x - true_scroll[0] - 300) / 20
 	true_scroll[1] += (player_rect.y - true_scroll[1] - 280) / 2
 	scroll = true_scroll.copy()
 	scroll[0] = int(scroll[0])
 	scroll[1] = int(scroll[1])
-
+	win.blit(Sky, (0 ,-1400 - scroll[1]/10))
 	#man.draw(display)
 	#goblin.draw(display)
 	#actually drawing the bullets from bullet spamming
-	
+
 	tile_rects = []
 	spawnPlatforms(man.maxYCoordinate, 4, tile_rects, scroll)
 	y = 0
@@ -239,6 +256,7 @@ def redrawGameWindow():
 
 	man.x = player_rect.x - scroll[0]
 	man.y = player_rect.y - scroll[1]
+
 	#print(f'man.y {man.y} man.maxYCoordinate {man.maxYCoordinate} player_rect.y {player_rect.y}')
 	if (man.currentViewportLevel >0 and player_rect.y < man.maxYCoordinate) or (player_rect.y < man.maxYCoordinate):
 		man.maxYCoordinate -= canvas_height
@@ -253,6 +271,7 @@ def redrawGameWindow():
 		man.isDash = False
 
 	pygame.display.update()
+
 
 
 
