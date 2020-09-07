@@ -1,11 +1,12 @@
 import pygame
 import sys
-#import random
+import random
 sys.path.append('classes')
 import player, enemy, projectile, healthBar, ammoui
+from collections import deque
 
 #globals for the project
-canvas_width = 800
+canvas_width = 800	#keep canvas_width a multiple of 32 always so increase and decrease accordingly as tiles and platforms spawned accordingly
 canvas_height = 600
 
 even = True
@@ -17,7 +18,7 @@ clock = pygame.time.Clock()
  
 pygame.mixer.init()
 pygame.mixer.music.load("./sounds/music.mp3")
-pygame.mixer.music.set_volume(0.1)
+pygame.mixer.music.set_volume(0.0)
 pygame.mixer.music.play(-1)
 
 
@@ -44,7 +45,10 @@ collision_types = {'top': False, 'bottom': False, 'right': False, 'left': False}
 
 true_scroll = [0,0]
 
-game_map = [['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
+for x_platform_cood in man.leftPlatformsX:
+	man.rightPlatformsX.append( canvas_width - (x_platform_cood + (16*3)) )
+
+game_map = deque( [['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
 			['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
 			['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
 			['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
@@ -74,9 +78,9 @@ game_map = [['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'
 			['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1'],
 			['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1'],
             ['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1'],
-            ['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1']]
+            ['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1']])
 
-
+init_gamemap_length = len(game_map)
 
 def collision_test(rect,tiles):
     hit_list = []
@@ -89,65 +93,83 @@ def switchEven():
 	global even
 	even = not even
 
-#can be called during camera move to plot the platforms alternately on left and right with order reveres from previous viewport
-def checkEvenOrOdd(current_platform):
-	global even
+#generates randomX coordinate by first radnomly choosing left side or right side and then from 
+#corresponding side's choices randomly selects a xcoordinate
+def getCoodFromLeftOrRight():
+	## 0 is left 1 is right
+	#side_choice = random.choice([0, 1])
+	#the index of coordinate to be returned from left or right side arrays
+	switchEven()
+	cood_choice = random.choice([0, 1, 2])
 	if even:
-		return current_platform % 2
+		return man.leftPlatformsX[cood_choice]
 	else:
-		return not (current_platform % 2)
+		return man.rightPlatformsX[cood_choice]
 
-def spawnUnitPlatform(current_platform_x, current_platform_y, tile_rects, scroll):
-	#win.blit(grass_img, (300 - scroll[0], -50 - scroll[1]))
-	#tile_rects.append(pygame.Rect(300 , -50  , 32, 32))
-	win.blit(grass_img, (current_platform_x  - scroll[0], current_platform_y - scroll[1]))
-	tile_rects.append(pygame.Rect(current_platform_x , current_platform_y  , 32, 32))
-	win.blit(grass_img, ((current_platform_x + 32)  - scroll[0], current_platform_y - scroll[1]))
-	tile_rects.append(pygame.Rect((current_platform_x + 32)  , current_platform_y , 32, 32))
-	win.blit(grass_img, ((current_platform_x + 64)  - scroll[0], current_platform_y - scroll[1]))
-	tile_rects.append(pygame.Rect((current_platform_x + 64) , current_platform_y , 32, 32))
 
-def spawnPlatforms(y_origin, platform_count, tile_rects, scroll):
-	#print(f'man.currentViewportLevel: {man.currentViewportLevel} yorigin: {y_origin}')
-	currentViewportLevel = man.currentViewportLevel
-	currentYOrigin = y_origin
-	while currentViewportLevel >= 0:
-		#print(f'---- currentViewportLevel: {currentViewportLevel}')
-		current_platform = 1
-		platform_y_offset = (canvas_height/platform_count) - (canvas_height/platform_count)/4
-		# randomly choosing whether to spawn current platform on left or right
-		while (currentViewportLevel > 0 and current_platform <= platform_count) or current_platform < platform_count:
-			if checkEvenOrOdd(current_platform):
-				current_platform_x = 220
-				#current_platform_x = 50
+def blitStripAndUpdateGameMap(randomXCoordinate):
+	strip_list = []
+	if randomXCoordinate == -1:
+		x=0
+		while x <= (canvas_width - 32):
+			strip_list.append('0')
+			x+=32
+	else:
+		x=0
+		while x <= (canvas_width - 32):
+			if randomXCoordinate>=x and randomXCoordinate<= (x+32):
+				strip_list.extend(['2','2','2'])
+				x+=96
 			else:
-				current_platform_x = canvas_width - (220 + (16*3))
-				#current_platform_x = canvas_width - (50 + (16*3))
-			current_platform_y = currentYOrigin + (platform_y_offset * current_platform)
-			#spawn a series of 3 dirt tiles one after other to simulate a platform and check if the last platform for that frame it should spawn a bit lower eg here 70px
-			spawnUnitPlatform(current_platform_x, current_platform_y + 70 if current_platform == platform_count else current_platform_y, tile_rects, scroll)
-			current_platform += 1
+				strip_list.append('0')
+				x+=32
+	game_map.appendleft(strip_list)
 
-		currentViewportLevel -= 1
-		currentYOrigin += canvas_height
+
+def spawnPlatformsNew(y_origin, platform_count, tile_rects, scroll):
+	currentYOrigin = (y_origin + canvas_height) - 32
+	current_platform = platform_count
+	#platform_y_offset = (canvas_height/platform_count) - (canvas_height/platform_count)/4
+	platform_y_offset = (canvas_height/platform_count) - (canvas_height/platform_count)/platform_count
+	while(currentYOrigin >= y_origin and y_origin <0):
+		current_platform_y = (y_origin + (platform_y_offset * current_platform)) + 32
+		#below condition means we have to blit row as a platform containing row
+		if current_platform_y >= currentYOrigin and current_platform_y <= currentYOrigin + 32:
+			#means this is a strip which will include our platform so align platform y coordinate with current strip being iterated on 
+			current_platform_y = currentYOrigin
+			#check in man.tileStripMapForY if current Y level strip has already been blitted i.e added to game_map
+			if currentYOrigin not in man.tileStripMapForY:
+				#blit a tile strip containing 
+				blitStripAndUpdateGameMap(getCoodFromLeftOrRight())
+				current_platform -= 1
+				man.tileStripMapForY[currentYOrigin] = True
+			else:
+				return
+		else:
+			if currentYOrigin not in man.tileStripMapForY:
+				#blit a 0 tile strip
+				blitStripAndUpdateGameMap(-1)
+				man.tileStripMapForY[currentYOrigin] = True
+			else:
+				#means this strip already present so just return from function as above tiles would also have been blitted as well
+				return
+
+		currentYOrigin-= 32
 	
 
 def redrawGameWindow():
-	#win.blit(bg, (0 ,0))
 	win.blit(backSky, (0 ,0))
 	true_scroll[0] += (player_rect.x - true_scroll[0] - 300) / 20
 	true_scroll[1] += (player_rect.y - true_scroll[1] - 280) / 2
 	scroll = true_scroll.copy()
 	scroll[0] = int(scroll[0])
 	scroll[1] = int(scroll[1])
-
-	#man.draw(display)
-	#goblin.draw(display)
-	#actually drawing the bullets from bullet spamming
 	
 	tile_rects = []
-	spawnPlatforms(man.maxYCoordinate, 4, tile_rects, scroll)
+
+	spawnPlatformsNew(man.maxYCoordinate, 4, tile_rects, scroll)
 	y = 0
+	y = init_gamemap_length - len(game_map)
 	for layer in game_map:
 		x = 0
 		for tile in layer:
