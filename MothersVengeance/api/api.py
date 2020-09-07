@@ -2,7 +2,7 @@ import pygame
 import sys
 #import random
 sys.path.append('classes')
-import player, enemy, projectile, healthBar, ammoui
+import player, enemy, projectile, healthBar, ammoui, tile_rect
 
 #globals for the project
 canvas_width = 600
@@ -60,6 +60,8 @@ run = True
 
 gameStates = 0
 
+
+
 game_map = [['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
 			['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
 			['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
@@ -97,7 +99,7 @@ game_map = [['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'
 def collision_test(rect,tiles):
     hit_list = []
     for tile in tiles:
-        if rect.colliderect(tile):
+        if rect.colliderect(tile.rect):
             hit_list.append(tile)
     return hit_list
 
@@ -116,12 +118,13 @@ def checkEvenOrOdd(current_platform):
 def spawnUnitPlatform(current_platform_x, current_platform_y, tile_rects, scroll):
 	#win.blit(grass_img, (300 - scroll[0], -50 - scroll[1]))
 	#tile_rects.append(pygame.Rect(300 , -50  , 32, 32))
-	win.blit(grass_img, (current_platform_x  - scroll[0], current_platform_y - scroll[1]))
-	tile_rects.append(pygame.Rect(current_platform_x , current_platform_y  , 32, 32))
-	win.blit(grass_img, ((current_platform_x + 32)  - scroll[0], current_platform_y - scroll[1]))
-	tile_rects.append(pygame.Rect((current_platform_x + 32)  , current_platform_y , 32, 32))
-	win.blit(grass_img, ((current_platform_x + 64)  - scroll[0], current_platform_y - scroll[1]))
-	tile_rects.append(pygame.Rect((current_platform_x + 64) , current_platform_y , 32, 32))
+	win.blit(branch_body, (current_platform_x  - scroll[0], current_platform_y - scroll[1]))
+	tile_rects.append(tile_rect.TileRect(type='2', rect=pygame.Rect(current_platform_x , current_platform_y  , 32, 32)))
+	win.blit(branch_body, ((current_platform_x + 32)  - scroll[0], current_platform_y - scroll[1]))
+	tile_rects.append(tile_rect.TileRect(type='2', rect=pygame.Rect((current_platform_x + 32)  , current_platform_y , 32, 32)))
+	win.blit(branch_body, ((current_platform_x + 64)  - scroll[0], current_platform_y - scroll[1]))
+	tile_rects.append(tile_rect.TileRect(type='2', rect=pygame.Rect((current_platform_x + 64) , current_platform_y , 32, 32)))
+
 
 def spawnPlatforms(y_origin, platform_count, tile_rects, scroll):
 	#print(f'man.currentViewportLevel: {man.currentViewportLevel} yorigin: {y_origin}')
@@ -204,7 +207,7 @@ def redrawGameWindow():
 					else:
 						win.blit(branch_body,(x * 32 - scroll[0], y * 32 - scroll[1]))
 			if tile != '0':
-				tile_rects.append(pygame.Rect(x * 32, y * 32, 32, 32))
+				tile_rects.append(tile_rect.TileRect(type=tile, rect=pygame.Rect(x * 32, y * 32, 32, 32)))
 			x += 1
 		y += 1
 
@@ -228,17 +231,17 @@ def redrawGameWindow():
 	#print("tile_rects length: "+ str(len(tile_rects)))
 	for tile in hit_list:
 		if man.right:
-			player_rect.right = tile.left
+			player_rect.right = tile.rect.left
 			collision_types['right'] = True
 		elif man.left:
-			player_rect.left = tile.right
+			player_rect.left = tile.rect.right
 			collision_types['left'] = True
 
 	player_rect.y += player_movement[1]
 	hit_list = collision_test(player_rect, tile_rects)
 	for tile in hit_list:
 		if player_movement[1] > 0:
-			player_rect.bottom = tile.top
+			player_rect.bottom = tile.rect.top
 			collision_types['bottom'] = True
 
 	if man.isJump and collision_types['bottom'] == True:
