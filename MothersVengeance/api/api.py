@@ -42,7 +42,8 @@ grass_img = pygame.image.load('./imgs/tiles/grass.png')
 dirt_img = pygame.transform.scale(dirt_img, (32, 32))
 grass_img = pygame.transform.scale(grass_img, (32, 32))
 
-
+branch_moss = pygame.image.load('./imgs/tiles/Branch_Moss.png')
+branch_sap = pygame.image.load('./imgs/tiles/Branch_Sap.png')
 branch_body = pygame.image.load('./imgs/tiles/Branch_Body.png')
 branch_start_left = pygame.image.load('./imgs/tiles/Branch_Start.png')
 branch_start_right = pygame.transform.flip(branch_start_left, True, False)
@@ -68,13 +69,13 @@ game_map = [['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'
 			['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
 			['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
 			['0','0','0','0','0','0','2','2','2','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
-			['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','2','2','0','0','0','0','0','0'],
+			['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','3','3','0','0','0','0','0','0'],
 			['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1','1','0','0','0','0','0','0'],
 			['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1','1','0','0','0','0','0','0'],
 			['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1','1','0','0','0','0','0','0'],
-			['0','0','0','0','0','0','0','0','0','0','0','0','0','0','2','2','0','1','1','0','0','0','0','0','0'],
+			['0','0','0','0','0','0','0','0','0','0','0','0','0','4','4','4','0','1','1','0','0','0','0','0','0'],
 			['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1','1','0','0','0','0','0','0'],
-			['0','0','0','0','0','0','0','0','0','2','2','0','0','0','0','0','0','1','1','0','0','0','0','0','0'],
+			['0','0','0','0','0','0','0','0','0','3','3','3','0','0','0','0','0','1','1','0','0','0','0','0','0'],
 			['0','0','2','2','0','0','0','0','0','0','0','0','0','0','0','0','0','1','1','0','0','0','0','0','0'],
             ['0','0','1','1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
             ['0','0','1','1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
@@ -84,7 +85,7 @@ game_map = [['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'
             ['0','0','1','1','0','0','0','0','0','0','0','0','0','0','0','0','0','1','1','0','0','0','0','0','0'],
             ['0','0','1','1','0','0','0','0','0','0','0','0','0','0','0','0','0','1','1','0','0','0','0','0','0'],
             ['2','2','1','1','0','0','0','0','0','0','0','0','0','0','0','0','0','1','1','0','0','0','0','0','0','2','2','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
-            ['1','1','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','1','1','2','2','2','2','2','2','1','1','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2'],
+            ['1','1','2','2','2','2','1','1','1','1','1','1','1','2','2','2','2','1','1','2','2','2','2','2','2','1','1','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2'],
             ['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1'],
 			['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1'],
 			['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1'],
@@ -119,11 +120,11 @@ def spawnUnitPlatform(current_platform_x, current_platform_y, tile_rects, scroll
 	#win.blit(grass_img, (300 - scroll[0], -50 - scroll[1]))
 	#tile_rects.append(pygame.Rect(300 , -50  , 32, 32))
 	win.blit(branch_body, (current_platform_x  - scroll[0], current_platform_y - scroll[1]))
-	tile_rects.append(tile_rect.TileRect(type='2', rect=pygame.Rect(current_platform_x , current_platform_y  , 32, 32)))
+	tile_rects.append(tile_rect.TileRect(tile_type='2', rect=pygame.Rect(current_platform_x , current_platform_y  , 32, 32)))
 	win.blit(branch_body, ((current_platform_x + 32)  - scroll[0], current_platform_y - scroll[1]))
-	tile_rects.append(tile_rect.TileRect(type='2', rect=pygame.Rect((current_platform_x + 32)  , current_platform_y , 32, 32)))
+	tile_rects.append(tile_rect.TileRect(tile_type='2', rect=pygame.Rect((current_platform_x + 32)  , current_platform_y , 32, 32)))
 	win.blit(branch_body, ((current_platform_x + 64)  - scroll[0], current_platform_y - scroll[1]))
-	tile_rects.append(tile_rect.TileRect(type='2', rect=pygame.Rect((current_platform_x + 64) , current_platform_y , 32, 32)))
+	tile_rects.append(tile_rect.TileRect(tile_type='2', rect=pygame.Rect((current_platform_x + 64) , current_platform_y , 32, 32)))
 
 
 def spawnPlatforms(y_origin, platform_count, tile_rects, scroll):
@@ -206,8 +207,76 @@ def redrawGameWindow():
 					# if it's in the middle, render it as body
 					else:
 						win.blit(branch_body,(x * 32 - scroll[0], y * 32 - scroll[1]))
+
+			if tile == '3':
+				# Check tile left & right
+				# LHS of screen
+				if x < 10:
+					# check if the tile the right most branch tile
+					if layer[x+1] != '3':
+						#length lesser than 2 -> 1 end + 1 body
+						if x < 2 or layer [x-2] != '3':
+							win.blit(branch_sap,(x * 32 - scroll[0], y * 32 - scroll[1]))
+						else:
+							win.blit(branch_start_right,(x * 32 - scroll[0], y * 32 - scroll[1]))
+					# check if the tile the left most branch tile
+					elif x == 0 or layer[x-1] != '3':
+						win.blit(branch_end_left,(x * 32 - scroll[0], y * 32 - scroll[1]))
+					# if it's in the middle, render it as body
+					else:
+						win.blit(branch_sap,(x * 32 - scroll[0], y * 32 - scroll[1]))
+				# win.blit(grass_img, (x * 32 - scroll[0], y * 32 - scroll[1]))
+				# RHS of screen 
+				else:
+					# check if the tile the right most branch tile
+					if layer[x-1] != '3':
+						#length lesser than 3 -> 1 end + 1 body
+						if x > len(layer) - 2 or layer [x-2] != '3':
+							win.blit(branch_sap,(x * 32 - scroll[0], y * 32 - scroll[1]))
+						else:
+							win.blit(branch_start_right,(x * 32 - scroll[0], y * 32 - scroll[1]))
+					# check if the tile the left most branch tile
+					elif x == len(layer) - 1 or layer[x+1] != '3':
+						win.blit(branch_end_right,(x * 32 - scroll[0], y * 32 - scroll[1]))
+					# if it's in the middle, render it as body
+					else:
+						win.blit(branch_sap,(x * 32 - scroll[0], y * 32 - scroll[1]))
+			
+			if tile == '4':
+				# Check tile left & right
+				# LHS of screen
+				if x < 10:
+					# check if the tile the right most branch tile
+					if layer[x+1] != '4':
+						#length lesser than 2 -> 1 end + 1 body
+						if x < 2 or layer [x-2] != '4':
+							win.blit(branch_moss,(x * 32 - scroll[0], y * 32 - scroll[1]))
+						else:
+							win.blit(branch_start_right,(x * 32 - scroll[0], y * 32 - scroll[1]))
+					# check if the tile the left most branch tile
+					elif x == 0 or layer[x-1] != '4':
+						win.blit(branch_end_left,(x * 32 - scroll[0], y * 32 - scroll[1]))
+					# if it's in the middle, render it as body
+					else:
+						win.blit(branch_sap,(x * 32 - scroll[0], y * 32 - scroll[1]))
+				# win.blit(grass_img, (x * 32 - scroll[0], y * 32 - scroll[1]))
+				# RHS of screen 
+				else:
+					# check if the tile the right most branch tile
+					if layer[x-1] != '4':
+						#length lesser than 3 -> 1 end + 1 body
+						if x > len(layer) - 2 or layer [x-2] != '4':
+							win.blit(branch_moss,(x * 32 - scroll[0], y * 32 - scroll[1]))
+						else:
+							win.blit(branch_start_right,(x * 32 - scroll[0], y * 32 - scroll[1]))
+					# check if the tile the left most branch tile
+					elif x == len(layer) - 1 or layer[x+1] != '4':
+						win.blit(branch_end_right,(x * 32 - scroll[0], y * 32 - scroll[1]))
+					# if it's in the middle, render it as body
+					else:
+						win.blit(branch_moss,(x * 32 - scroll[0], y * 32 - scroll[1]))
 			if tile != '0':
-				tile_rects.append(tile_rect.TileRect(type=tile, rect=pygame.Rect(x * 32, y * 32, 32, 32)))
+				tile_rects.append(tile_rect.TileRect(tile_type=tile, rect=pygame.Rect(x * 32, y * 32, 32, 32)))
 			x += 1
 		y += 1
 
@@ -243,6 +312,7 @@ def redrawGameWindow():
 		if player_movement[1] > 0:
 			player_rect.bottom = tile.rect.top
 			collision_types['bottom'] = True
+			man.onBranch = tile.tile_type
 
 	if man.isJump and collision_types['bottom'] == True:
 		collision_types['bottom'] = False
@@ -256,6 +326,7 @@ def redrawGameWindow():
 		man.jumpCount = 0
 	else:
 		man.jumpCount+=1
+		man.onBranch = ''
 
 	man.x = player_rect.x - scroll[0]
 	man.y = player_rect.y - scroll[1]

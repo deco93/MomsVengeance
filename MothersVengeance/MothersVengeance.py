@@ -113,16 +113,15 @@ while run:
 
 
 
-		
 	if keys[pygame.K_LEFT] and man.x >= man.vel and not man.isDash:
 		#man.x -= man.vel
-		man.vel = -5
+		man.vel = -5 if man.onBranch != '4' else 0
 		man.left = True
 		man.right = False
 		man.standing = False
 	elif keys[pygame.K_RIGHT] and man.x < canvas_width - man.width and not man.isDash:
 		#man.x += man.vel
-		man.vel = 5
+		man.vel = 5 if man.onBranch != '4' else 0
 		man.left = False
 		man.right = True
 		man.standing = False
@@ -144,9 +143,11 @@ while run:
 	if keys[pygame.K_SPACE]:
 		if man.jumpCount == 0 and man.isDash == False:
 			if man.isSquish:
-				man.gravity = -15 * man.currentSquishFrame
+				man.gravity = -23 if man.currentSquishFrame > 1 else (-15 * man.currentSquishFrame)
 			else:
 				man.gravity = -15
+			if man.onBranch == '3':
+				man.gravity = man.gravity * 2 // 3
 
 	# key UP for long jump in the air.
 	if keys[pygame.K_UP]:
