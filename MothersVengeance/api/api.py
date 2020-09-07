@@ -200,6 +200,10 @@ def redrawGameWindow():
 	scroll[1] = int(scroll[1])
 	win.blit(Sky, (0 ,-1400 - scroll[1]/5))
 	win.blit(TreeTrunk, (150, -1600 - scroll[1]))
+	win.blit(TreeTrunk, (150, -3200 - scroll[1]))
+	win.blit(TreeTrunk, (150, -4800 - scroll[1]))
+	win.blit(TreeTrunk, (150, -6400 - scroll[1]))
+	win.blit(TreeTrunk, (150, -8000 - scroll[1]))
 
 	#man.draw(display)
 	#goblin.draw(display)
