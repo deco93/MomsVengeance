@@ -2,3 +2,10 @@
  *.pyc
  .idea/
 .vs/
+MothersVengeance/api/__pycache__/__init__.cpython-37.pyc
+MothersVengeance/api/__pycache__/api.cpython-37.pyc
+MothersVengeance/classes/__pycache__/ammoui.cpython-37.pyc
+MothersVengeance/classes/__pycache__/enemy.cpython-37.pyc
+MothersVengeance/classes/__pycache__/healthBar.cpython-37.pyc
+MothersVengeance/classes/__pycache__/player.cpython-37.pyc
+MothersVengeance/classes/__pycache__/projectile.cpython-37.pyc
