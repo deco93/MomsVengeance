@@ -191,7 +191,7 @@ while run:
 	if gameStates == 1:
 
 		seconds = (pygame.time.get_ticks() - start_ticks) / 1000
-		counter = 61 - seconds
+		counter = 121 - seconds
 
 		if man.win:
 			gameStates = 3
