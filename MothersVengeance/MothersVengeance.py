@@ -1,6 +1,7 @@
 import pygame
 import sys
 from api.api import *
+import time
 
 #pygame.mixer.init()
 #pygame.mixer.music.load("./sounds/music.mp3")
@@ -172,10 +173,17 @@ while run:
 
 		win.fill((0,0,0))
 
-		pygame.mixer.Sound("./sounds/greyandmama_combined.wav").play(0)
-
+		
+		pygame.mixer.music.load("./sounds/greyandmama_combined.wav")
+		pygame.mixer.music.set_volume(0.1)
+		pygame.mixer.music.play()
+		flipper = True
+		while pygame.mixer.music.get_busy():
+			flipper = not flipper	#just flipping a random value until sound completed
 		DrawText("You Win!", font, (255, 0, 255), win, 250, 300)
 		DrawText("The Bravest Putty Mom Has Saved Her Baby!", font, (255, 0, 255), win, 50, 350)
+		#time.sleep(3000)
+		#baby_sound.stop()
 		pygame.display.update()
 		
 
