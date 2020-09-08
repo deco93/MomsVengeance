@@ -152,11 +152,11 @@ def checkEvenOrOdd(current_platform):
 def spawnUnitPlatform(current_platform_x, current_platform_y, tile_rects, scroll):
 	#win.blit(grass_img, (300 - scroll[0], -50 - scroll[1]))
 	#tile_rects.append(pygame.Rect(300 , -50  , 32, 32))
-	win.blit(branch_body, (current_platform_x  - scroll[0], current_platform_y - scroll[1]))
+	win.blit(branch_body, (current_platform_x, current_platform_y - scroll[1]))
 	tile_rects.append(tile_rect.TileRect(tile_type='2', rect=pygame.Rect(current_platform_x , current_platform_y  , 32, 32)))
-	win.blit(branch_body, ((current_platform_x + 32)  - scroll[0], current_platform_y - scroll[1]))
+	win.blit(branch_body, ((current_platform_x + 32), current_platform_y - scroll[1]))
 	tile_rects.append(tile_rect.TileRect(tile_type='2', rect=pygame.Rect((current_platform_x + 32)  , current_platform_y , 32, 32)))
-	win.blit(branch_body, ((current_platform_x + 64)  - scroll[0], current_platform_y - scroll[1]))
+	win.blit(branch_body, ((current_platform_x + 64), current_platform_y - scroll[1]))
 	tile_rects.append(tile_rect.TileRect(tile_type='2', rect=pygame.Rect((current_platform_x + 64) , current_platform_y , 32, 32)))
 
 
@@ -247,7 +247,7 @@ def redrawGameWindow():
 						win.blit(branch_end_right,(x * 32, y * 32 - scroll[1]))
 					# if it's in the middle, render it as body
 					else:
-						win.blit(branch_body,(x * 32 - scroll[0], y * 32 - scroll[1]))
+						win.blit(branch_body,(x * 32 , y * 32 - scroll[1]))
 
 			if tile == '3':
 				# Check tile left & right
@@ -257,15 +257,15 @@ def redrawGameWindow():
 					if layer[x+1] != '3':
 						#length lesser than 2 -> 1 end + 1 body
 						if x < 2 or layer [x-2] != '3':
-							win.blit(branch_sap,(x * 32 - scroll[0], y * 32 - scroll[1]))
+							win.blit(branch_sap,(x * 32 , y * 32 - scroll[1]))
 						else:
-							win.blit(branch_start_right,(x * 32 - scroll[0], y * 32 - scroll[1]))
+							win.blit(branch_start_right,(x * 32, y * 32 - scroll[1]))
 					# check if the tile the left most branch tile
 					elif x == 0 or layer[x-1] != '3':
-						win.blit(branch_end_left,(x * 32 - scroll[0], y * 32 - scroll[1]))
+						win.blit(branch_end_left,(x * 32, y * 32 - scroll[1]))
 					# if it's in the middle, render it as body
 					else:
-						win.blit(branch_sap,(x * 32 - scroll[0], y * 32 - scroll[1]))
+						win.blit(branch_sap,(x * 32, y * 32 - scroll[1]))
 				# win.blit(grass_img, (x * 32 - scroll[0], y * 32 - scroll[1]))
 				# RHS of screen 
 				else:
@@ -273,15 +273,15 @@ def redrawGameWindow():
 					if layer[x-1] != '3':
 						#length lesser than 3 -> 1 end + 1 body
 						if x > len(layer) - 2 or layer [x-2] != '3':
-							win.blit(branch_sap,(x * 32 - scroll[0], y * 32 - scroll[1]))
+							win.blit(branch_sap,(x * 32, y * 32 - scroll[1]))
 						else:
-							win.blit(branch_start_right,(x * 32 - scroll[0], y * 32 - scroll[1]))
+							win.blit(branch_start_right,(x * 32, y * 32 - scroll[1]))
 					# check if the tile the left most branch tile
 					elif x == len(layer) - 1 or layer[x+1] != '3':
-						win.blit(branch_end_right,(x * 32 - scroll[0], y * 32 - scroll[1]))
+						win.blit(branch_end_right,(x * 32, y * 32 - scroll[1]))
 					# if it's in the middle, render it as body
 					else:
-						win.blit(branch_sap,(x * 32 - scroll[0], y * 32 - scroll[1]))
+						win.blit(branch_sap,(x * 32 , y * 32 - scroll[1]))
 			
 			if tile == '4':
 				# Check tile left & right
@@ -291,15 +291,15 @@ def redrawGameWindow():
 					if layer[x+1] != '4':
 						#length lesser than 2 -> 1 end + 1 body
 						if x < 2 or layer [x-2] != '4':
-							win.blit(branch_moss,(x * 32 - scroll[0], y * 32 - scroll[1]))
+							win.blit(branch_moss,(x * 32, y * 32 - scroll[1]))
 						else:
-							win.blit(branch_start_right,(x * 32 - scroll[0], y * 32 - scroll[1]))
+							win.blit(branch_start_right,(x * 32, y * 32 - scroll[1]))
 					# check if the tile the left most branch tile
 					elif x == 0 or layer[x-1] != '4':
-						win.blit(branch_end_left,(x * 32 - scroll[0], y * 32 - scroll[1]))
+						win.blit(branch_end_left,(x * 32 , y * 32 - scroll[1]))
 					# if it's in the middle, render it as body
 					else:
-						win.blit(branch_sap,(x * 32 - scroll[0], y * 32 - scroll[1]))
+						win.blit(branch_sap,(x * 32, y * 32 - scroll[1]))
 				# win.blit(grass_img, (x * 32 - scroll[0], y * 32 - scroll[1]))
 				# RHS of screen 
 				else:
@@ -307,15 +307,15 @@ def redrawGameWindow():
 					if layer[x-1] != '4':
 						#length lesser than 3 -> 1 end + 1 body
 						if x > len(layer) - 2 or layer [x-2] != '4':
-							win.blit(branch_moss,(x * 32 - scroll[0], y * 32 - scroll[1]))
+							win.blit(branch_moss,(x * 32, y * 32 - scroll[1]))
 						else:
-							win.blit(branch_start_right,(x * 32 - scroll[0], y * 32 - scroll[1]))
+							win.blit(branch_start_right,(x * 32, y * 32 - scroll[1]))
 					# check if the tile the left most branch tile
 					elif x == len(layer) - 1 or layer[x+1] != '4':
-						win.blit(branch_end_right,(x * 32 - scroll[0], y * 32 - scroll[1]))
+						win.blit(branch_end_right,(x * 32, y * 32 - scroll[1]))
 					# if it's in the middle, render it as body
 					else:
-						win.blit(branch_moss,(x * 32 - scroll[0], y * 32 - scroll[1]))
+						win.blit(branch_moss,(x * 32, y * 32 - scroll[1]))
 			if tile != '0':
 				tile_rects.append(tile_rect.TileRect(tile_type=tile, rect=pygame.Rect(x * 32, y * 32, 32, 32)))
 			x += 1
@@ -369,7 +369,7 @@ def redrawGameWindow():
 		man.jumpCount+=1
 		man.onBranch = ''
 
-	man.x = player_rect.x - scroll[0]
+	man.x = player_rect.x
 	man.y = player_rect.y - scroll[1]
 
 	#print(f'man.y {man.y} man.maxYCoordinate {man.maxYCoordinate} player_rect.y {player_rect.y}')
