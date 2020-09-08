@@ -160,11 +160,24 @@ while run:
 
 		win.fill((0,0,0))
 
-		DrawText("Failed To Save Baby!", font, (255, 0, 0), win, 210, 300)
+		DrawText("Failed To Save Baby!", font, (255, 0, 255), win, 210, 300)
 		pygame.display.update()
 
+	if gameStates == 3:
 
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				run = False
+		run = False
 
+		win.fill((0,0,0))
+
+		pygame.mixer.Sound("./sounds/greyandmama_combined.wav").play(0)
+
+		DrawText("You Win!", font, (255, 0, 255), win, 250, 300)
+		DrawText("The Bravest Putty Mom Has Saved Her Baby!", font, (255, 0, 255), win, 50, 350)
+		pygame.display.update()
+		
 
 	###################### End Of Menu Code ######################
 	if gameStates == 1:
@@ -172,10 +185,13 @@ while run:
 		seconds = (pygame.time.get_ticks() - start_ticks) / 1000
 		counter = 61 - seconds
 
+		if man.win:
+			gameStates = 3
+
 		if (counter <= 0):
 			gameStates = 2
 
-
+		
 
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:

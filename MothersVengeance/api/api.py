@@ -242,11 +242,11 @@ def redrawGameWindow():
 
 
 	tile_rects = []
-	print(final_layer[0])
+	# print(final_layer[0])
 	if not final_layer[0]:
-		if -man.maxYCoordinate > 600:
+		if -man.maxYCoordinate > 2000:
 			final_layer[0] = spawnFinalLayersWithBaby()
-			print(final_layer[0])
+			# print(final_layer[0])
 		else:
 			spawnPlatformsNew(man.maxYCoordinate, 4, tile_rects, scroll)
 
