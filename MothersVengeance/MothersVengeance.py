@@ -31,6 +31,8 @@ babyLocation = (400, 265)
 differenceX = babyLocation[0] - birdLandLocation[0]
 differenceY = babyLocation[1] - birdLandLocation[1]
 
+branch_moss = pygame.image.load('./imgs/tiles/Branch_Moss.png')
+
 
 def DrawText(text, font, color, surface, x, y):
 	textObj = font.render(text, 1, color)
@@ -40,10 +42,15 @@ def DrawText(text, font, color, surface, x, y):
 
 
 
+
+
+start_ticks = pygame.time.get_ticks()
+
 #main loop
 while run:
 
 	clock.tick(30)	#for setting FPS to 30
+
 	######################### Menu Code ########################
 	while(gameStates == 0):
 		win.blit(Sky, (0 ,-1400))
@@ -83,7 +90,7 @@ while run:
 			win.blit(bird_fly[birdAnimFrame % 3], (birdCurrentLocationX, birdCurrentLocationY))
 			win.blit(putty_baby, (birdCurrentLocationX + differenceX, birdCurrentLocationY + differenceY))
 
-		DrawText("Putty Mama", TitleFont, (255, 255, 255), win, 210, 100)
+		DrawText("Putty Mama", TitleFont, (255, 255, 255), win, 195, 100)
 
 		events = pygame.event.get()
 		for event in events:
@@ -94,7 +101,7 @@ while run:
 		keys = pygame.key.get_pressed()
 
 		if(selectedGameMenus == 0):
-			DrawText("Press Enter To Play", font, (255, 0, 0), win, 200, 300)
+			DrawText("Press Enter To Play", font, (255, 0, 0), win, 180, 300)
 			DrawText("Credits", font, (255, 255, 255), win, 250, 400)
 			for event in events:
 				if event.type == pygame.KEYDOWN:
@@ -109,7 +116,7 @@ while run:
 				continue
 
 		if(selectedGameMenus == 1):
-			DrawText("Press Enter To Play", font, (255, 255, 255), win, 200, 300)
+			DrawText("Press Enter To Play", font, (255, 255, 255), win, 180, 300)
 			DrawText("Credits", font, (255, 0, 0), win, 250, 400)
 			for event in events:
 				if event.type == pygame.KEYDOWN:
@@ -128,14 +135,14 @@ while run:
 				continue
 
 		if(selectedGameMenus == 2):
-			DrawText("Zhengyuan Huang", font, (255, 255, 255), win, 200, 150)
-			DrawText("Renee Linford", font, (255, 255, 255), win, 200, 180)
-			DrawText("Brandon Montero", font, (255, 255, 255), win, 200, 210)
-			DrawText("Saransh Wali", font, (255, 255, 255), win, 200, 240)
-			DrawText("Pengxi Wang (Pix)", font, (255, 255, 255), win, 200, 270)
-			DrawText("Haotian Zhang", font, (255, 255, 255), win, 200, 300)
+			DrawText("Zhengyuan Huang", font, (255, 255, 255), win, 200, 200)
+			DrawText("Renee Linford", font, (255, 255, 255), win, 200, 240)
+			DrawText("Brandon Montero", font, (255, 255, 255), win, 200, 280)
+			DrawText("Saransh Wali", font, (255, 255, 255), win, 200, 320)
+			DrawText("Pengxi Wang (Pix)", font, (255, 255, 255), win, 200, 360)
+			DrawText("Haotian Zhang", font, (255, 255, 255), win, 200, 400)
 
-			DrawText("Return", font, (255, 0, 0), win, 230, 500)
+			DrawText("Return", font, (255, 0, 0), win, 250, 500)
 
 			for event in events:
 				if event.type == pygame.KEYDOWN:
@@ -145,105 +152,119 @@ while run:
 
 		pygame.display.update()
 
+	if gameStates == 2:
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				run = False
+
+
+		win.fill((0,0,0))
+
+		DrawText("Failed To Save Baby!", font, (255, 0, 0), win, 210, 300)
+		pygame.display.update()
+
+
+
+
 	###################### End Of Menu Code ######################
+	if gameStates == 1:
 
-	for event in pygame.event.get():
-		if event.type == pygame.QUIT:
-			run = False
+		seconds = (pygame.time.get_ticks() - start_ticks) / 1000
+		counter = 61 - seconds
 
-	keys = pygame.key.get_pressed()
+		if (counter <= 0):
+			gameStates = 2
 
 
 
-	if keys[pygame.K_LEFT] and man.x >= man.vel and not man.isDash:
-		#man.x -= man.vel
-		man.vel = -5 if man.onBranch != '4' else 0
-		man.left = True
-		man.right = False
-		man.standing = False
-	elif keys[pygame.K_RIGHT] and man.x < canvas_width - man.width and not man.isDash:
-		#man.x += man.vel
-		man.vel = 5 if man.onBranch != '4' else 0
-		man.left = False
-		man.right = True
-		man.standing = False
-	else:
-		man.standing = True
-		man.walkCount = 0
-		man.vel = 0
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				run = False
 
-	if keys[pygame.K_DOWN]:
-		if man.gravity in [0, 1] and man.isDash == False:
-			man.isSquish = True
-			man.vel = 0
-		else:
-			man.isSquish = False
-	else:
-		man.isSquish = False
+		keys = pygame.key.get_pressed()
 
-	if keys[pygame.K_SPACE]:
-		if man.jumpCount == 0 and man.isDash == False:
-			if man.isSquish:
-				man.gravity = -23 if man.currentSquishFrame > 1 else (-15 * man.currentSquishFrame)
-			else:
-				man.gravity = -15
-			if man.onBranch == '3':
-				man.gravity = man.gravity * 2 // 3
 
-	# key UP for long jump in the air.
-	if keys[pygame.K_UP]:
-		# in_air and dropping
-		if man.jumpCount > 2 and man.gravity > 0 and not man.isDash:
-			man.isBubbled = True
-		else:
-			man.isBubbled = False
-	else:
-		man.isBubbled = False
-	# print(man.isBubbled)
 
-	# key x, c for left, right dash
-	if keys[pygame.K_x]:
-		if man.dashCount == 0:
+		if keys[pygame.K_LEFT] and man.x >= man.vel and not man.isDash:
+			#man.x -= man.vel
+			man.vel = -5 if man.onBranch != '4' else 0
 			man.left = True
 			man.right = False
-			man.isDash = True
-			man.dashCount = player.DASH_COOL_DOWN
-
-
-	if keys[pygame.K_c]:
-		if man.dashCount == 0:
-			man.right = True
+			man.standing = False
+		elif keys[pygame.K_RIGHT] and man.x < canvas_width - man.width and not man.isDash:
+			#man.x += man.vel
+			man.vel = 5 if man.onBranch != '4' else 0
 			man.left = False
-			man.isDash = True
-			man.dashCount = player.DASH_COOL_DOWN
-
-	# calc vel
-	if man.isDash:
-		man.standing = False
-		if man.left and man.x >= man.vel:
-			man.vel = -(player.DASH_DELTA_X-man.currentDashFrame)
-		elif man.right and man.x < canvas_width - man.width:
-			man.vel = player.DASH_DELTA_X-man.currentDashFrame
+			man.right = True
+			man.standing = False
 		else:
+			man.standing = True
+			man.walkCount = 0
 			man.vel = 0
-	# print('dashcount: %s, isDash %s, vel: %s' %(man.dashCount, man.isDash, man.vel))
-			# print(man.isSquish)
-		#man.isJump = True
-		#man.left = False
-		#man.right = False
-		#man.walkCount = 0
 
-	# else:
-	# 	if man.jumpCount >= 0:
-	#
-	# 		man.gravity = -10
-	# 		man.jumpCount -= 1
-	# 	else:
-	# 		man.isJump = False
-	# 		man.jumpCount = 2
+		if keys[pygame.K_DOWN]:
+			if man.gravity in [0, 1] and man.isDash == False:
+				man.isSquish = True
+				man.vel = 0
+			else:
+				man.isSquish = False
+		else:
+			man.isSquish = False
 
-	# Gravity
+		if keys[pygame.K_SPACE]:
+			if man.jumpCount == 0 and man.isDash == False:
+				if man.isSquish:
+					man.gravity = -23 if man.currentSquishFrame > 1 else (-15 * man.currentSquishFrame)
+				else:
+					man.gravity = -15
+				if man.onBranch == '3':
+					man.gravity = man.gravity * 2 // 3
 
-	redrawGameWindow()
-	
+		# key UP for long jump in the air.
+		if keys[pygame.K_UP]:
+			# in_air and dropping
+			if man.jumpCount > 2 and man.gravity > 0 and not man.isDash:
+				man.isBubbled = True
+			else:
+				man.isBubbled = False
+		else:
+			man.isBubbled = False
+		# print(man.isBubbled)
+
+		# key x, c for left, right dash
+		if keys[pygame.K_x]:
+			if man.dashCount == 0:
+				man.left = True
+				man.right = False
+				man.isDash = True
+				man.dashCount = player.DASH_COOL_DOWN
+
+
+		if keys[pygame.K_c]:
+			if man.dashCount == 0:
+				man.right = True
+				man.left = False
+				man.isDash = True
+				man.dashCount = player.DASH_COOL_DOWN
+
+		# calc vel
+		if man.isDash:
+			man.standing = False
+			if man.left and man.x >= man.vel:
+				man.vel = -(player.DASH_DELTA_X-man.currentDashFrame)
+			elif man.right and man.x < canvas_width - man.width:
+				man.vel = player.DASH_DELTA_X-man.currentDashFrame
+			else:
+				man.vel = 0
+
+
+		redrawGameWindow()
+
+
+
+		display = font.render(str(int(counter)), 1, (0,0,0))
+		win.blit(display, (20, 20))
+
+		pygame.display.update()
+
 pygame.quit()

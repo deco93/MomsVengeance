@@ -53,8 +53,6 @@ branch_start_right = pygame.transform.flip(branch_start_left, True, False)
 branch_end_right = pygame.image.load('./imgs/tiles/Branch_End_New.png')
 branch_end_left = pygame.transform.flip(branch_end_right, True, False)
 
-branch_moss = pygame.image.load('./imgs/tiles/Branch_Moss.png')
-
 putty_baby = pygame.image.load('./imgs/PuttyBaby.png')
 putty_baby = pygame.transform.scale(putty_baby, (96, 96))
 
@@ -127,6 +125,9 @@ game_map = [['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'
 			['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1'],
             ['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1'],
             ['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1']]
+
+
+
 
 
 
@@ -208,10 +209,6 @@ def redrawGameWindow():
 	win.blit(TreeTrunk, (150, -4800 - scroll[1]))
 	win.blit(TreeTrunk, (150, -6400 - scroll[1]))
 	win.blit(TreeTrunk, (150, -8000 - scroll[1]))
-
-	#man.draw(display)
-	#goblin.draw(display)
-	#actually drawing the bullets from bullet spamming
 
 
 
@@ -381,9 +378,12 @@ def redrawGameWindow():
 
 
 	################### Draw Health Bar ####################
-	pygame.draw.rect(win, (255, 0, 0), (20, 20, man.maxHealth, 20))
-	pygame.draw.rect(win, (0, 255, 0), (20, 20, man.currentHealth, 20))
+	#pygame.draw.rect(win, (255, 0, 0), (20, 20, man.maxHealth, 20))
+	#pygame.draw.rect(win, (0, 255, 0), (20, 20, man.currentHealth, 20))
 	################### End Of Draw Health Bar #############
+
+
+
 	# Dash Cool Down
 	# decrease counter by 1
 	man.dashCount = max(man.dashCount - 1, 0)
