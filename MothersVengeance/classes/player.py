@@ -44,6 +44,9 @@ class Player(object):
 		self.currentDashFrame = 0
 		self.BubbleAnimCounter = 0
 		self.currentBubbleFrame = 0
+		self.leftPlatformsX = [140, 190, 230]
+		self.rightPlatformsX = [] #fill these later in api.py according to canvas width global
+
 		self.IdleAnimCounter = 0
 		self.currentIdleFrame = 0
 		self.WalkAnimCounter = 0
@@ -58,6 +61,7 @@ class Player(object):
 		self.isInAir = True
 		self.maxYCoordinate = 0 
 		self.currentViewportLevel = 0
+		self.tileStripMapForY = {}	#stores a bool which indicates if an entire strip of tiles have been pushed against that y coordinate
 
 	def __increAnim(self, counter, length, frame, speed, repeat = False):
 		
