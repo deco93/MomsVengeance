@@ -25,7 +25,7 @@ clock = pygame.time.Clock()
  
 pygame.mixer.init()
 pygame.mixer.music.load("./sounds/music.mp3")
-pygame.mixer.music.set_volume(0.0)
+pygame.mixer.music.set_volume(0.05)
 pygame.mixer.music.play(-1)
 
 
@@ -179,16 +179,24 @@ def blitStripAndUpdateGameMap(randomXCoordinate):
 				x+=32
 	game_map.appendleft(strip_list)
 
+def getRandomYOffset(maxYOffset):
+	return random.randrange(110, int(maxYOffset)+1, 4)
 
-def spawnPlatformsNew(y_origin, platform_count, tile_rects, scroll):
+
+def spawnPlatformsNew(y_origin, platform_count, tile_rects):
 	currentYOrigin = (y_origin + canvas_height) - 32
 	current_platform = platform_count
 	#platform_y_offset = (canvas_height/platform_count) - (canvas_height/platform_count)/4
-	platform_y_offset = (canvas_height/platform_count) - (canvas_height/platform_count)/platform_count
+	#platform_y_offset = (canvas_height/platform_count) - (canvas_height/platform_count)/platform_count
 	while(currentYOrigin >= y_origin and y_origin <0):
+		if(current_platform == platform_count or current_platform == 1):
+			platform_y_offset = (canvas_height/platform_count) - ((canvas_height/platform_count)/platform_count)
+		else:
+			platform_y_offset = getRandomYOffset( (canvas_height/platform_count) - ((canvas_height/platform_count)/platform_count) )
+		#print(f'platform_y_offset: {platform_y_offset} currentYOrigin: {currentYOrigin} y_origin: {y_origin}')
 		current_platform_y = (y_origin + (platform_y_offset * current_platform)) + 32
 		#below condition means we have to blit row as a platform containing row
-		if current_platform_y >= currentYOrigin and current_platform_y <= currentYOrigin + 32:
+		if (current_platform_y >= currentYOrigin and current_platform_y <= currentYOrigin + 32) or current_platform_y>(currentYOrigin + 32):
 			#means this is a strip which will include our platform so align platform y coordinate with current strip being iterated on 
 			current_platform_y = currentYOrigin
 			#check in man.tileStripMapForY if current Y level strip has already been blitted i.e added to game_map
@@ -244,11 +252,11 @@ def redrawGameWindow():
 	tile_rects = []
 	# print(final_layer[0])
 	if not final_layer[0]:
-		if -man.maxYCoordinate > 2000:
+		if -man.maxYCoordinate > 1000:
 			final_layer[0] = spawnFinalLayersWithBaby()
 			# print(final_layer[0])
 		else:
-			spawnPlatformsNew(man.maxYCoordinate, 4, tile_rects, scroll)
+			spawnPlatformsNew(man.maxYCoordinate, 5, tile_rects)
 
 
 	y = 0

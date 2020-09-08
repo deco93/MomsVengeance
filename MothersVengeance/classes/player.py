@@ -47,7 +47,7 @@ class Player(object):
 		self.currentDashFrame = 0
 		self.BubbleAnimCounter = 0
 		self.currentBubbleFrame = 0
-		self.leftPlatformsX = [140, 190, 230]
+		self.leftPlatformsX = [140, 190, 220]
 		self.rightPlatformsX = [] #fill these later in api.py according to canvas width global
 
 		self.IdleAnimCounter = 0

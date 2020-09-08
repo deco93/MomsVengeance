@@ -76,6 +76,8 @@
     <Content Include="imgs\player\walk\walk 7.png" />
     <Content Include="imgs\player\walk\walk 8.png" />
     <Content Include="sounds\bullet.wav" />
+    <Content Include="sounds\export.mp3" />
+    <Content Include="sounds\greyandmama_combined.wav" />
     <Content Include="sounds\hit.wav" />
     <Content Include="sounds\music.mp3" />
   </ItemGroup>
