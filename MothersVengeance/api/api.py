@@ -172,7 +172,7 @@ def blitStripAndUpdateGameMap(randomXCoordinate):
 		x=0
 		while x <= (canvas_width - 32):
 			if randomXCoordinate>=x and randomXCoordinate<= (x+32):
-				strip_list.extend(['2','2','2'])
+				strip_list.extend(['2','2','2']) # ['3', '3' ,'3'] sap ['4', '4' ,'4'] moss (make sure that most of them are normal branches)
 				x+=96
 			else:
 				strip_list.append('0')
