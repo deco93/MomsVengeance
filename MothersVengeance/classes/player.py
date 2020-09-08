@@ -7,6 +7,9 @@ MAXIMUM_BUBBLED_DROP_SPEED = 3
 
 class Player(object):
 	def __init__(self, x, y, width, height):
+
+		self.win = False
+
 		self.x = x
 		self.y = y
 		self.width = width

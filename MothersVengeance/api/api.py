@@ -11,6 +11,7 @@ canvas_height = 800
 
 even = True
 
+
 bg = pygame.image.load('./imgs/bg.jpg')
 backSky = pygame.image.load('./imgs/backSky.png')
 backSky = pygame.transform.scale(backSky, (600, 1200))
@@ -18,7 +19,7 @@ backSky = pygame.transform.scale(backSky, (600, 1200))
 Sky = pygame.image.load('./imgs/Sky.png')
 
 TreeTrunk = pygame.image.load('./imgs/tiles/NewTrunk.png')
-TreeTrunk = pygame.transform.scale(TreeTrunk, (450, 2400))
+TreeTrunk = pygame.transform.scale(TreeTrunk, (600, 2400))
 
 clock = pygame.time.Clock()
  
@@ -38,7 +39,7 @@ run = True
 TitleFont = pygame.font.SysFont('comicsans', 45, True)
 font = pygame.font.SysFont('comicsans', 30, True)
 man = player.Player(50, 300, 64, 64)
-
+final_layer = [False]
 score = 0
 
 dirt_img = pygame.image.load('./imgs/tiles/dirt.png')
@@ -94,10 +95,7 @@ true_scroll = [0,0]
 for x_platform_cood in man.leftPlatformsX:
 	man.rightPlatformsX.append( canvas_width - (x_platform_cood + (16*3)) )
 
-game_map = deque( [['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
-			['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
-			['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
-			['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
+game_map = deque( [
 			['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
 			['0','0','0','0','0','0','2','2','2','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
 			['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
@@ -211,6 +209,21 @@ def spawnPlatformsNew(y_origin, platform_count, tile_rects, scroll):
 
 		currentYOrigin-= 32
 	
+def spawnFinalLayersWithBaby():
+
+	layers = [
+		['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
+		['0','0','0','0','0','0','0','0','5','5','5','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
+		['0','0','0','0','0','0','0','0','6','6','6','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
+		['0','0','0','0','0','0','0','0','6','6','6','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
+		['0','0','0','0','0','0','0','0','2','2','2','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
+		['0','0','0','2','2','2','0','0','0','0','0','0','0','0','0','2','2','2','0','0','0','0','0','0','0'],
+		['0','0','0','0','0','0','0','0','0','0','0','0','2','2','2','0','0','0','0','0','0','0','0','0','0']]
+
+	for layer in layers[::-1]:
+		game_map.appendleft(layer)
+
+	return True
 
 def redrawGameWindow():
 	win.blit(backSky, (0 ,0))
@@ -220,21 +233,27 @@ def redrawGameWindow():
 	scroll[0] = int(scroll[0])
 	scroll[1] = int(scroll[1])
 	win.blit(Sky, (0 ,-1400 - scroll[1]/5))
-	win.blit(TreeTrunk, (75, -1600 - scroll[1]))
-	win.blit(TreeTrunk, (75, -3200 - scroll[1]))
-	win.blit(TreeTrunk, (75, -4800 - scroll[1]))
-	win.blit(TreeTrunk, (75, -6400 - scroll[1]))
-	win.blit(TreeTrunk, (75, -8000 - scroll[1]))
+	win.blit(TreeTrunk, (0, -1600 - scroll[1]))
+	win.blit(TreeTrunk, (0, -3200 - scroll[1]))
+	win.blit(TreeTrunk, (0, -4800 - scroll[1]))
+	win.blit(TreeTrunk, (0, -6400 - scroll[1]))
+	win.blit(TreeTrunk, (0, -8000 - scroll[1]))
 
 	#man.draw(display)
 	#goblin.draw(display)
 	#actually drawing the bullets from bullet spamming
 
 
-
 	tile_rects = []
+	print(final_layer[0])
+	if not final_layer[0]:
+		if -man.maxYCoordinate > 600:
+			final_layer[0] = spawnFinalLayersWithBaby()
+			print(final_layer[0])
+		else:
+			spawnPlatformsNew(man.maxYCoordinate, 4, tile_rects, scroll)
 
-	spawnPlatformsNew(man.maxYCoordinate, 4, tile_rects, scroll)
+
 	y = 0
 	y = init_gamemap_length - len(game_map)
 	for layer in game_map:
@@ -335,6 +354,11 @@ def redrawGameWindow():
 					# if it's in the middle, render it as body
 					else:
 						win.blit(branch_moss,(x * 32, y * 32 - scroll[1]))
+
+			# Baby
+			if tile == '5':
+				if layer[x+1] == '5' and layer[x+2] == '5':
+					win.blit(putty_baby, (x * 32, y * 32 - scroll[1]))
 			if tile != '0':
 				tile_rects.append(tile_rect.TileRect(tile_type=tile, rect=pygame.Rect(x * 32, y * 32, 32, 32)))
 			x += 1
@@ -365,6 +389,9 @@ def redrawGameWindow():
 		elif man.left:
 			player_rect.left = tile.rect.right
 			collision_types['left'] = True
+		
+		if tile.tile_type == '5' or tile.tile_type == '6':
+			man.win = True
 
 	player_rect.y += player_movement[1]
 	hit_list = collision_test(player_rect, tile_rects)
@@ -373,6 +400,9 @@ def redrawGameWindow():
 			player_rect.bottom = tile.rect.top
 			collision_types['bottom'] = True
 			man.onBranch = tile.tile_type
+
+		if tile.tile_type == '5' or tile.tile_type == '6':
+			man.win = True
 
 	if man.isJump and collision_types['bottom'] == True:
 		collision_types['bottom'] = False
