@@ -133,7 +133,9 @@ game_map = deque( [
 
 init_gamemap_length = len(game_map)
 
-
+#>1000 value signifies last prcedurally generated platform wasn't a moss so dont need to 
+#follow a special spawn rule for current platform as it will anyway be reachable
+prevSapY = 1000 
 
 
 def collision_test(rect,tiles):
@@ -163,6 +165,7 @@ def getCoodFromLeftOrRight():
 
 def blitStripAndUpdateGameMap(randomXCoordinate):
 	strip_list = []
+	sapPlatformSpawned = False
 	if randomXCoordinate == -1:
 		x=0
 		while x <= (canvas_width - 32):
@@ -175,6 +178,7 @@ def blitStripAndUpdateGameMap(randomXCoordinate):
 				r = random.randint(0, 10)
 				if r < 1:
 					strip_list.extend(['3','3','3'])# ['3', '3' ,'3'] sap
+					sapPlatformSpawned = True
 				elif r < 2:
 					strip_list.extend(['4','4','4'])#  ['4', '4' ,'4'] moss
 				else:
@@ -184,12 +188,41 @@ def blitStripAndUpdateGameMap(randomXCoordinate):
 				strip_list.append('0')
 				x+=32
 	game_map.appendleft(strip_list)
+	return sapPlatformSpawned
 
 def getRandomYOffset(maxYOffset):
-	return random.randrange(110, int(maxYOffset)+1, 4)
+	return random.randrange(130, int(maxYOffset)+1, 5)
 
+def updateGameMapWithNewPlatform(prevSapPlatformY, currentPlatformY, xCoodForUpdate):
+	actualCurrentYOrigin = currentPlatformY
+	differenceNewAndPrevSapY = abs(currentPlatformY) - abs(prevSapPlatformY)
+	if differenceNewAndPrevSapY >128:
+		tempExcessYToBeRemoved = differenceNewAndPrevSapY - 128
+		if (tempExcessYToBeRemoved // 32) > 0:
+			tempExcessYToBeRemoved = 32 * (tempExcessYToBeRemoved // 32)
+			stripOfZeroesToBeUpdated = game_map[int(tempExcessYToBeRemoved/32)-1]
+			x = 0
+			while x < len(stripOfZeroesToBeUpdated)*32:
+				if x <=xCoodForUpdate and xCoodForUpdate <(x+32):
+					updateIndex = int(x/32)
+					r = random.randint(0, 10)
+					if r < 2:	#update with moss platform tile
+						stripOfZeroesToBeUpdated[updateIndex] = '4'
+						stripOfZeroesToBeUpdated[updateIndex + 1] = '4'
+						stripOfZeroesToBeUpdated[updateIndex + 2] = '4'
+					else:		#update with normal platform tile
+						stripOfZeroesToBeUpdated[updateIndex] = '2'
+						stripOfZeroesToBeUpdated[updateIndex + 1] = '2'
+						stripOfZeroesToBeUpdated[updateIndex + 2] = '2'
+					break
+
+				x+=32
+			actualCurrentYOrigin = actualCurrentYOrigin + tempExcessYToBeRemoved	#here actualCurrentYOrigin will always be a -ve number and tempExcessYToBeRemoved a positive number so that new platform's Y coordinate 
+																					#has moved effectively that much down, as is required to be within reachable height from prev sap platform
+	return actualCurrentYOrigin
 
 def spawnPlatformsNew(y_origin, platform_count, tile_rects):
+	global prevSapY
 	currentYOrigin = (y_origin + canvas_height) - 32
 	current_platform = platform_count
 	#platform_y_offset = (canvas_height/platform_count) - (canvas_height/platform_count)/4
@@ -208,7 +241,16 @@ def spawnPlatformsNew(y_origin, platform_count, tile_rects):
 			#check in man.tileStripMapForY if current Y level strip has already been blitted i.e added to game_map
 			if currentYOrigin not in man.tileStripMapForY:
 				#blit a tile strip containing 
-				blitStripAndUpdateGameMap(getCoodFromLeftOrRight())
+				sapSpawned = False
+				tempYOrigin = 1000	#dummy impossible value for placeholder
+				if prevSapY < 0:
+					tempYOrigin = updateGameMapWithNewPlatform(prevSapY, currentYOrigin, getCoodFromLeftOrRight())	# supply prevSapY and the tobe possibly the actual 
+					#currentYOrigin(in case difference between y coordinates of previous spawned sapPlatform and the tobe spawned platform at currentYOrigin <=96 pixels) 
+					prevSapY = 1000
+				if(tempYOrigin == currentYOrigin or tempYOrigin == 1000):
+					sapSpawned = blitStripAndUpdateGameMap(getCoodFromLeftOrRight())
+				if sapSpawned:
+					prevSapY = currentYOrigin
 				current_platform -= 1
 				man.tileStripMapForY[currentYOrigin] = True
 			else:
@@ -275,7 +317,7 @@ def redrawGameWindow():
 			final_layer[0] = spawnFinalLayersWithBaby()
 			# print(final_layer[0])
 		else:
-			spawnPlatformsNew(man.maxYCoordinate, 5, tile_rects)
+			spawnPlatformsNew(man.maxYCoordinate, 4, tile_rects)
 
 
 	y = 0
