@@ -256,7 +256,7 @@ while run:
 		# print(man.isBubbled)
 
 		# key x, c for left, right dash
-		if keys[pygame.K_x]:
+		if keys[pygame.K_a]:
 			if man.dashCount == 0:
 				man.left = True
 				man.right = False
@@ -264,7 +264,7 @@ while run:
 				man.dashCount = player.DASH_COOL_DOWN
 
 
-		if keys[pygame.K_c]:
+		if keys[pygame.K_d]:
 			if man.dashCount == 0:
 				man.right = True
 				man.left = False
